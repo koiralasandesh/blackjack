@@ -13,7 +13,7 @@ class algorithms
         bool is_over_17(int total_value);  // Checks if it value is over 17  or 17 for the dealer class
         bool credit_check(int *credit);
         bool credit_limit(int bet, int* credit);
-        int player_count
+        int player_count;
     
     
 };
