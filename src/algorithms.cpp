@@ -1,6 +1,7 @@
 using namespace std;
 
 #include<iostream>
+#include<algorithms.hpp>
 
 
 class algorithms
