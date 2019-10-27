@@ -6,7 +6,7 @@ using namespace std;
 Main_window::Main_window() : box(Gtk::ORIENTATION_VERTICAL), play_button("PLAY"), rules_button("RULES"), quit_button("QUIT")
 {
     set_size_request(800, 500);
-    set_title("--Mainwin Page--");
+    set_title("--BlackJack Main Window--");
 
     add(vbox);
 
@@ -22,11 +22,16 @@ Main_window::Main_window() : box(Gtk::ORIENTATION_VERTICAL), play_button("PLAY")
     show_all_children();
 }
 
-Main_window::~Main_window(){}
+Main_window::~Main_window()
+{
+    
+}
 
 void Main_window::on_play_button_click()
 {
     //goes to bjp window
+    Mainwin *bjp = new Mainwin();
+    bjp->show();
 }
 
 void Main_window::on_rules_button_click()
@@ -34,4 +39,8 @@ void Main_window::on_rules_button_click()
     //goes to rules window that just display list of rules
     Rules_window *rules = new Rules_window();
     rules->show();
+}
+void Main_window::on_quit_button_click()
+{
+    close();
 }

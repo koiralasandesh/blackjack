@@ -117,6 +117,98 @@ private:
   chat_message_queue write_msgs_;
 };
 
+//Bipul
+/*
+Class Mainwin : public Gtk::Window
+{
+ public:
+   main_win::Mainwin() : vbox(Gtk::ORIENTATION_VERTICAL)
+   {
+        set_title("WELCOME TO BLACKJACK");
+    set_default_size(600,200);
+
+    
+    Gtk::Box *vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 0));
+    add(*vbox);
+
+    Gtk::MenuBar *menubar = Gtk::manage(new Gtk::MenuBar());
+        vbox->pack_start(*menubar, Gtk::PACK_SHRINK, 1);
+       
+       Gtk::MenuItem *menuitem_file = Gtk::manage(new Gtk::MenuItem("_MENU", true));
+    menubar->append(*menuitem_file);
+    Gtk::Menu *filemenu = Gtk::manage(new Gtk::Menu());
+    menuitem_file->set_submenu(*filemenu);
+       Gtk::MenuItem *menuitem_play = Gtk::manage(new Gtk::MenuItem("_NEW GAME", true));
+    menuitem_play->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+    filemenu->append(*menuitem_play);
+       Gtk::MenuItem *menuitem_quit = Gtk::manage(new Gtk::MenuItem("_Quit", true));
+    menuitem_quit->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+    filemenu->append(*menuitem_quit);
+       
+       Gtk::MenuItem *menuitem_help = Gtk::manage(new Gtk::MenuItem("_            HELP", true));
+    menubar->append(*menuitem_help);
+    Gtk::Menu *help_menu = Gtk::manage(new Gtk::Menu());
+    menuitem_help->set_submenu(*help_menu);
+       Gtk::MenuItem *menuitem_rules = Gtk::manage(new Gtk::MenuItem("_RULES", true));
+    menuitem_rules->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+    help_menu->append(*menuitem_rules);
+       
+       
+Gtk::MenuBar *menubar2 = Gtk::manage(new Gtk::MenuBar());
+        vbox->pack_start(*menubar2, Gtk::PACK_SHRINK, 1);
+       Gtk::MenuItem *menuitem_dealer = Gtk::manage(new Gtk::MenuItem("                                                                                                  DEALER", true));
+          menubar2->append(*menuitem_dealer);
+          Gtk::Menu *dealer_menu = Gtk::manage(new Gtk::Menu());
+          menuitem_dealer->set_submenu(*dealer_menu);
+       Gtk::MenuItem *menuitem_hit = Gtk::manage(new Gtk::MenuItem("_HIT", true));
+                menuitem_hit->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+                dealer_menu->append(*menuitem_hit);
+       
+       Gtk::MenuItem *menuitem_s = Gtk::manage(new Gtk::MenuItem("_STAND", true));
+                menuitem_s->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+                dealer_menu->append(*menuitem_s);
+       
+       
+Gtk::MenuBar *menubar3 = Gtk::manage(new Gtk::MenuBar());
+        vbox->pack_start(*menubar3, Gtk::PACK_SHRINK, 1);
+       Gtk::MenuItem *menuitem_player1 = Gtk::manage(new Gtk::MenuItem("_   PLAYER1", true));
+               menubar3->append(*menuitem_player1);
+               Gtk::Menu *player_menu = Gtk::manage(new Gtk::Menu());
+               menuitem_player1->set_submenu(*player_menu);
+       Gtk::MenuItem *menuitem_hit1 = Gtk::manage(new Gtk::MenuItem("_HIT", true));
+          menuitem_hit1->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+          player_menu->append(*menuitem_hit1);
+       Gtk::MenuItem *menuitem_stand = Gtk::manage(new Gtk::MenuItem("_STAND", true));
+                menuitem_stand->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+                player_menu->append(*menuitem_stand);
+       Gtk::MenuItem *menuitem_double = Gtk::manage(new Gtk::MenuItem("_DOUBLE", true));
+                menuitem_double->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+                player_menu->append(*menuitem_double);
+       
+ Gtk::MenuItem *menuitem_credits = Gtk::manage(new Gtk::MenuItem("_            CREDITS", true));
+    menubar3->append(*menuitem_credits);
+    Gtk::Menu *credits_menu = Gtk::manage(new Gtk::Menu());
+    menuitem_credits->set_submenu(*credits_menu);
+       Gtk::MenuItem *menuitem_total = Gtk::manage(new Gtk::MenuItem("_TOTAL CREDITS", true));
+    menuitem_total->signal_activate().connect(sigc::mem_fun(*this, &Mainwin::on_quit_click));
+    credits_menu->append(*menuitem_total);
+
+    vbox->show_all();
+   }
+    BJP_window::~BJP_window()
+    {
+        
+    }
+
+  */
+ protected:
+   Gtk::Box *vbox;
+   Gtk::Label player;
+   Gtk::Button close;
+
+}
+
+
 int main(int argc, char* argv[])
 {
   try
