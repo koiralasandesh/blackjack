@@ -1,4 +1,6 @@
 #include "mainwin.h"
+#include "rules.h"
+#include "bjp.h"
 #include <iostream>
 
 using namespace std;
@@ -39,8 +41,4 @@ void Main_window::on_rules_button_click()
     //goes to rules window that just display list of rules
     Rules_window *rules = new Rules_window();
     rules->show();
-}
-void Main_window::on_quit_button_click()
-{
-    close();
 }

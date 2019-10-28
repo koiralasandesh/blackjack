@@ -1,4 +1,5 @@
 #include "credit.h"
+#include <iostream>
 
 Credit::Credit(int credits, int wager)
 	: _credits{credits}, _wager{wager} {

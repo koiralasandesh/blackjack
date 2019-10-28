@@ -1,8 +1,7 @@
-using namespace std;
-
 #include<iostream>
 #include "algorithms.hpp"
 
+using namespace std;
 
 class algorithms
 {

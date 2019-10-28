@@ -1,23 +1,12 @@
+#include <hand.h>
 #include <stdio.h>
 #include <ctime>
 #include <iostream>
 #include <string>
 
-using std::string;
-using std::cout;
-using std::cin;
-using std::endl;
+using namespace std;
 
-struct DefineCard
-{
-    string suit;
-    string face;
-    int pointsValue;   // FACE => 10 POINTS & ACE's => 1 OR 11 (WHICHEVER IS BEST FOR PLAYER/DEALER
-    int cardStatus;   // 0 = InPlay , 1 = InDeck, 2 = DiscardPile
-} Deck[53]; // Deck[52] will be used when shuffling deck
-
-
-int main()
+Hand::Hand()
 {
     srand((unsigned)time(0));
     int New_Suit = 0;
@@ -73,4 +62,9 @@ int main()
 
     cout << endl << endl;
     cin >> New_Suit;
+}
+
+Hand::~Hand()
+{
+    
 }
