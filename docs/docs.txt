@@ -1,0 +1,73 @@
+*/ We would post all the variables/widgets/buttons/functions we use for our code here. Please make sure you enter all details 
+   like name, public/private/protected and purpose of the abstract. Also if possible please write down your initials after every 
+   entry so that if anyone else has a doubt they can talk directly to the person who created the piece.    */
+
+
+
+Widgets
+
+1)
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Buttons
+
+1)
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Variables
+
+1) Credit:
+	int _credits -> overall number of credits								[RB 10/26]
+	int _wager -> current round's bet										[RB 10/26]
+2)
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Functions
+
+
+1) Credit:
+	constructor Credit -> {credits, wager}									[RB 10/26]
+	void refresh_credits() -> sets dealer's credits back to 500				[RB 10/26]
+	void wager_credits(int wager) -> sets player's wager					[RB 10/26]
+	void win_credits(int wager) -> adds credits to player					[RB 10/26]
+	void lose_credits(int wager) -> takes wagered credits from player		[RB 10/26]
+	int num_credits() -> to access _credits									[RB 10/26]
+	int current_wager() -> to access _wager									[RB 10/26]
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Structs
+
+1)
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Classes
+
+1) Main_window (mainwin)
+2) Rules_window (rules)
+3) Credit (keeping track of credits and bets)
+ 
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
