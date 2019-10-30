@@ -52,6 +52,7 @@ Classes
 1) Main_window (mainwin)
 2) Rules_window (rules)
 3) Bet_window (bet)
+4) Player_choice_window (player_choice)
  
 
 
