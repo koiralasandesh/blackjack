@@ -16,7 +16,7 @@ Bet_window::Bet_window() : box(Gtk::ORIENTATION_VERTICAL), max_bet_button("MAX B
 
     min_bet_button.signal_clicked().connect(sigc::mem_fun(*this, &Bet_window::on_min_bet_button_click));
     vbox.pack_start(min_bet_button);
-    
+
     entryBet.set_max_length(30);
     entryBet.set_text("Enter name: ");
     entryBet.select_region(0, entryBet.get_text_length());
