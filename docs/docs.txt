@@ -59,7 +59,9 @@ Classes
 
 1) Main_window (mainwin)
 2) Rules_window (rules)
-3) Credit (keeping track of credits and bets)
+3) Bet_window (bet)
+4) Player_choice_window (player_choice)
+5) Credit (keeping track of credits and bets)
  
 
 
