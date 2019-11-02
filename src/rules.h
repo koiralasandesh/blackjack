@@ -12,7 +12,7 @@ class Rules_window : public Gtk::Window
     protected:
     Gtk::Box box;
     Gtk::Label rules_list;
-    Gtk::Button close;
+    Gtk::Button hide;
 };
 
 #endif
