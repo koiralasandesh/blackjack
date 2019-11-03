@@ -16,3 +16,5 @@ class Card {
 							// may be simpler to set ace initial value = 11?
 };
 
+// written: Rebecca B 11/2
+

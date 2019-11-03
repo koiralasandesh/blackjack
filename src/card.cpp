@@ -16,3 +16,6 @@ bool Card::is_ace() {
 void Card::ace_to_11() {
 	_value = 11;
 }
+
+// written: Rebecca B 11/2
+

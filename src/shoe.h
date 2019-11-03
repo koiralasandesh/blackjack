@@ -11,3 +11,5 @@ class Shoe {
 		void shuffle();			// randomize shoe
 };
 
+// written: Rebecca B 11/2
+

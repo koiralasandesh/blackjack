@@ -33,3 +33,5 @@ void Shoe::shuffle() {
 	std::shuffle(_shoe.begin(), _shoe.end(), std::default_random_engine(seed));
 }
 
+// written: Rebecca B 11/2
+
