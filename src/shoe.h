@@ -6,8 +6,8 @@ class Shoe {
 		std::vector<Card*> _shoe;
 	public:
 		void create_cards();	// generates 6 decks
-		Card* next_card();		// pops first card and returns card fields
-		void remove_card();
-		void shuffle();
+		Card* next_card();		// returns last card in shoe
+		void remove_card();		// pops last card
+		void shuffle();			// randomize shoe
 };
 
