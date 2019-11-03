@@ -1,14 +1,17 @@
-#pragma once
-
 typedef enum {SPADE, CLUB, DIAMOND, HEART} Suit;
-typedef enum {ACE = 1, JACK = 11, QUEEN, KING} Face;
+typedef enum {ACE = 1, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING} Face;
 
 class Card {
 	private:
 		int _value; // 1 - 11, face cards are all 10
-		Suite _suit;
+		Suit _suit;
 		Face _face;
 	public:
-		Card(int value, Suite suit, Face face);
+		Card(int value, Suit suit, Face face);
+		int value();
+		int suit();
+		int face();
 		bool is_ace();
+		void ace_to_11();
+};
 
