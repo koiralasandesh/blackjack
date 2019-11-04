@@ -5,10 +5,6 @@ GTKFLAGS = `/usr/bin/pkg-config gtkmm-3.0 --cflags --libs`
 
 TARGETS=bjp bjd
 
-#lines 8 & 9 possibly unecessary
-debug: CXXFLAGS+= -g
-debug: default
-
 all:${TARGETS}
 
 blackjack: main.o mainwin.o card.o bjp.o bjd.o hand.o *.h
