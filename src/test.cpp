@@ -1,3 +1,16 @@
+/* file for testing class files. do not include in main makefile. to compile, create a new makefile in different directory,
+and include the card, shoe, and hand relevant files.
+
+makefile:
+
+test: card.h card.cpp test.cpp shoe.h shoe.cpp hand.h hand.cpp
+	g++ -o test test.cpp card.cpp shoe.cpp hand.cpp
+
+clean:
+	rm test
+
+*/
+
 #include <iostream>
 #include <vector>
 #include "shoe.h"
