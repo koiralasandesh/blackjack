@@ -1,24 +1,24 @@
-#ifndef HAND_H
-#define HAND_H
+#include "card.h"
+#include <vector>
 
-#include <gtkmm.h>
+class Hand {
+	private:
+		std::vector<Card*> _hand;
+		std::vector<Card*> _split_hand;
+		int _total_value;
+	public:
+		std::vector<Card*> get_hand();
+		std::vector<Card*> get_split_hand();
+		Card* get_card(int index);
+		void add_card_hand(Card* card);
+		int get_total_value();
+		void set_total_value();
+		int number_of_cards();
+		bool can_split();			// returns true if 1st 2 cards are identical
+		//void split_cards();		// WIP
+};
 
-using namespace std;
+// maybe need method to display/return hand's contents/cards?
 
-struct DefineCard
-{
-    string suit;
-    string face;
-    int pointsValue;   // FACE => 10 POINTS & ACE's => 1 OR 11 (WHICHEVER IS BEST FOR PLAYER/DEALER
-    int cardStatus;   // 0 = InPlay , 1 = InDeck, 2 = DiscardPile
-} Deck[53]; // Deck[52] will be used when shuffling deck
+// written: Rebecca B 11/4
 
-class Hand
-{
-public:
-    Hand();
-    virtual ~Hand();
-
-}
-
-#endif

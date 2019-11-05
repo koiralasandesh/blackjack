@@ -2,15 +2,31 @@
 
 Card::Card(int value, Suit suit, Face face) : _value{value}, _suit{suit}, _face{face} { }
 
-int Card::value() { return _value; }
+int Card::get_value() {
+	return _value;
+}
 
-int Card::suit() { return _suit; }
+void Card::set_value() {
+	if (_face == ACE) {
+		_value += 10;
+	}
+}
 
-int Card::face() { return _face; }
+int Card::get_suit() {
+	return _suit;
+}
+
+int Card::get_face() {
+	return _face;
+}
 
 bool Card::is_ace() {
-	if (_face == ACE) { return true; }
-	else { return false; }
+	if (_face == ACE) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void Card::ace_to_11() {

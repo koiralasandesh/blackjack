@@ -4,6 +4,10 @@
 #include <iostream>
 #include <chrono>
 
+std::vector<Card*> Shoe::get_shoe() {
+	return _shoe;
+}
+
 void Shoe::create_cards() {
 	int decks, s, f, value = 1;
 	for (decks = 0; decks < 6; decks++) {
@@ -23,9 +27,13 @@ void Shoe::create_cards() {
 	}
 }
 
-Card* Shoe::next_card() { return _shoe.back(); }
+Card* Shoe::next_card() {
+	return _shoe.back();
+}
 
-void Shoe::remove_card() { _shoe.pop_back(); }
+void Shoe::remove_card() {
+	_shoe.pop_back();
+}
 
 void Shoe::shuffle() {
 	// randomized w/ time-based seed
