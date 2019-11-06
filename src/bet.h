@@ -19,6 +19,6 @@ class Bet_window : public Gtk::Window
         void on_max_bet_button_click();
         void on_min_bet_button_click();
         void on_custom_bet_button_click();
-}
+};
 
 #endif

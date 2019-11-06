@@ -1,13 +1,13 @@
 #include "bet.h"
 #include <iostream>
-#include <string.h>
+#include <string>
 
 using namespace std;
 
-Bet_window::Bet_window() : box(Gtk::ORIENTATION_VERTICAL), max_bet_button("MAX BET"), min_bet_button("MIN BET"), custom_bet_button("CUSTOM")
+Bet_window::Bet_window() : vbox(Gtk::ORIENTATION_VERTICAL), max_bet_button("MAX BET : $5"), min_bet_button("MIN BET : $1"), custom_bet_button("CUSTOM")
 {
     set_size_request(500, 200);
-    set_title("--Bet Page--");
+    set_title("--Bet Amount--");
 
     add(vbox);
 
@@ -18,7 +18,7 @@ Bet_window::Bet_window() : box(Gtk::ORIENTATION_VERTICAL), max_bet_button("MAX B
     vbox.pack_start(min_bet_button);
 
     entryBet.set_max_length(30);
-    entryBet.set_text("Enter name: ");
+    entryBet.set_text("Enter amount between 1-100: ");
     entryBet.select_region(0, entryBet.get_text_length());
     vbox.pack_start(entryBet);
 
