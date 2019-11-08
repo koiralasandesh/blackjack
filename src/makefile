@@ -22,6 +22,15 @@ hand.o: hand.cpp *.h
 card.o : card.cpp *.h
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c card.cpp $(GTKFLAGS)
 
+shoe.o : shoe.cpp *.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c shoe.cpp $(GTKFLAGS)
+	
+player.o : player.cpp *.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c player.cpp $(GTKFLAGS)
+	
+dealer.o : dealer.cpp *.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c dealer.cpp $(GTKFLAGS)
+
 
 bjp: bjp.cpp chat_message.hpp
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ $< -lpthread
