@@ -39,5 +39,11 @@ class Player {
 		void win();				// where to put? maybe inside stand/doubledown/split???
 		void lose();			// also where to put?? maybe inside dealer and hit method
 		*/
+
+		//increase or decrease credits after comparing with dealer
+        void set_win_credits();
+        void set_lose_credits();
+        //added to get player bet and add to dealer credits
+        int get_bet();
 };
 

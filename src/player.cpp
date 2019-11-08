@@ -111,3 +111,19 @@ void Player::lose() {
 		dealer will have comparison check
 }
 */
+
+//added
+void Player::set_win_credits()
+{
+    _credits += _bet; 
+}
+
+void Player::set_lose_credits()
+{
+    _credits -= _bet; 
+}
+
+int Player::get_bet()
+{
+    return _bet;
+}
