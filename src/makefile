@@ -7,8 +7,8 @@ TARGETS=bjp bjd
 
 all:${TARGETS}
 
-blackjack: main.o mainwin.o card.o bjp.o bjd.o hand.o *.h
-	${CXX} $(CXXFLAGS) ${CPPFLAGS} -o blackjack main.o mainwin.o card.o bjp.o bjd.o $(GTKFLAGS)
+blackjack: main.o mainwin.o card.o bjp.o bjd.o hand.o card.o shoe.o player.o dealer.o *.h
+	${CXX} $(CXXFLAGS) ${CPPFLAGS} -o blackjack main.o mainwin.o card.o bjp.o bjd.o shoe.o player.o dealer.o shoe.o $(GTKFLAGS)
 
 main.o: main.cpp *.h
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c main.cpp $(GTKFLAGS)
