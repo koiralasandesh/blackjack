@@ -5,18 +5,12 @@
 #include <bits/stdc++.h>
 #include <iostream>
 
+Shoe::~Shoe() { }
+
 Card* Shoe::get_shoe() {
 	return _shoe;
 }
-/*
-void Shoe::renew_shoe() {
-	if (_current_card == -1) {
-		this->create_cards();
-		this->shuffle();
-	}
-	std::cerr << "shoe not empty, still " << _current_card+1 << "cards remaining" << std::endl;
-}
-*/
+
 void Shoe::create_cards() {
 	int decks, suit, face, value = 1, card_count = 0;
 	for (decks = 0; decks < 6; decks++) {

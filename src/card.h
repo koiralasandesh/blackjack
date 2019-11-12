@@ -9,7 +9,6 @@ class Card {	// every card initialized to {-1, NO_SUIT, NO_FACE}
 		Suit _suit = NO_SUIT;		// SPADE = 0, CLUB = 1, etc.
 		Face _face = NO_FACE;	
 	public:
-		//Card(int value, Suit suit, Face face);
 		Card();
 		int get_value();
 		void set_value(int value);

@@ -10,8 +10,8 @@ class Shoe {
 		int _current_card = 311;	// index for shoe
 	public:
 		//std::vector<Card> get_shoe();
+		virtual ~Shoe();
 		Card* get_shoe();		// shoe getter
-		//void renew_shoe();	// necessary?
 		void create_cards();	// generates 6 decks
 		Card next_card();		// returns last card in shoe
 		void remove_card();		// clears last card in shoe[current]. removed cards return "null" value.

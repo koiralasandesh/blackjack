@@ -1,7 +1,5 @@
 #include "card.h"
 
-//Card::Card(int value, Suit suit, Face face) : _value{value}, _suit{suit}, _face{face} { }
-
 Card::Card() { }
 
 int Card::get_value() {
