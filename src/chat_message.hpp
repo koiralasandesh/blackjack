@@ -1,13 +1,3 @@
-//
-// chat_message.hpp
-// ~~~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2019 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
 #ifndef CHAT_MESSAGE_HPP
 #define CHAT_MESSAGE_HPP
 
@@ -19,115 +9,97 @@
 
 // these two classes are examples of sending an
 // entire structure as part of the header
-class game_state
-{
-public:
-   bool dealer_cards_valid;
-   int dealer_cards[3];
-   bool player_cards_valid;
-   int player_cards[2][3]; // [players][cards]
-  // note you can't use std::string 
-  // or pointers
+class game_state {
+	public:
+		bool dealer_cards_valid;
+   		int dealer_cards[3];
+   		bool player_cards_valid;
+   		int player_cards[2][3]; // [players][cards]
+  		// note you can't use std::string or pointers
 };
 
-class client_action
-{
-public:
-  bool hit;   
-  bool stand;
-  bool join;
-  bool name_valid;
-  char name[25]; 
+class client_action {
+	public:
+ 		bool hit;   
+  		bool stand;
+  		bool join;
+  		bool name_valid;
+  		char name[25]; 
 };
 // ADDED ******************************
 
-class chat_message
-{
-public:
-  enum { header_length = 4 + sizeof(client_action) + sizeof(game_state) };
-  enum { max_body_length = 512 };
+class chat_message {
+	public:
+  		enum { header_length = 4 + sizeof(client_action) + sizeof(game_state) };
+  		enum { max_body_length = 512 };
 
-  chat_message()
-    : body_length_(0)
-  {
-  }
+  		chat_message() : body_length_(0) { }
 
-  const char* data() const
-  {
-    return data_;
-  }
+  		const char* data() const {
+    		return data_;
+  		}
 
-  char* data()
-  {
-    return data_;
-  }
+  		char* data() {
+    		return data_;
+		}
 
-  std::size_t length() const
-  {
-    return header_length + body_length_;
-  }
+  		std::size_t length() const {
+    		return header_length + body_length_;
+  		}
 
-  const char* body() const
-  {
-    return data_ + header_length;
-  }
+  		const char* body() const {
+    		return data_ + header_length;
+  		}
 
-  char* body()
-  {
-    return data_ + header_length;
-  }
+  		char* body() {
+			return data_ + header_length;
+  		}
 
-  std::size_t body_length() const
-  {
-    return body_length_;
-  }
+  		std::size_t body_length() const {
+    		return body_length_;
+  		}
 
-  void body_length(std::size_t new_length)
-  {
-    body_length_ = new_length;
-    if (body_length_ > max_body_length)
-      body_length_ = max_body_length;
-  }
+  		void body_length(std::size_t new_length) {
+    		body_length_ = new_length;
+    		if (body_length_ > max_body_length) {
+     			body_length_ = max_body_length;
+			}
+		}
 
-  bool decode_header()
-  {
-    char header[header_length + 1] = "";
-    std::strncat(header, data_, 4);
-    body_length_ = std::atoi(header);
-    char *p = data_ + 4; // skip the integer
-    std::memcpy(&ca,p,sizeof(client_action));
-    std::memcpy(&gs,p+sizeof(client_action),sizeof(game_state));
+  		bool decode_header() {
+    		char header[header_length + 1] = "";
+    		std::strncat(header, data_, 4);
+    		body_length_ = std::atoi(header);
+    		char *p = data_ + 4; // skip the integer
+    		std::memcpy(&ca,p,sizeof(client_action));
+    		std::memcpy(&gs,p+sizeof(client_action),sizeof(game_state));
 
-    if (body_length_ > max_body_length)
-    {
-      body_length_ = 0;
-      return false;
-    }
-    return true;
-  }
+    		if (body_length_ > max_body_length) {
+      			body_length_ = 0;
+      			return false;
+    		}
+    		return true;
+  		}
 
-  void encode_header()
-  {
-    char header[4 + 1] = "";
-    std::sprintf(header, "%4d", static_cast<int>(body_length_));
-    std::memcpy(data_, header, header_length);
+  		void encode_header() {
+    		char header[4 + 1] = "";
+    		std::sprintf(header, "%4d", static_cast<int>(body_length_));
+    		std::memcpy(data_, header, header_length);
 
+			// ADDED *********
+    		char *p = data_+4; // skip over the int we just extracted
+    		std::memcpy(p,&ca,sizeof(client_action));	// memcpy(*dest, *src, # bytes)
+    		std::memcpy(p+sizeof(client_action),&gs,sizeof(game_state));
+    		// ADDED *********
+  		}
+		// ADDED ******
+  		client_action ca;
+  		game_state gs;
+  		// ADDED ******
 
-	// ADDED *********
-    char *p = data_+4; // skip over the int we just extracted
-    std::memcpy(p,&ca,sizeof(client_action));	// memcpy(*dest, *src, # bytes)
-    std::memcpy(p+sizeof(client_action),&gs,sizeof(game_state));
-    // ADDED *********
-  }
-
-private:
-  char data_[header_length + max_body_length];
-  std::size_t body_length_;
-public:
-  // ADDED ******
-  client_action ca;
-  game_state gs;
-  // ADDED ******
+	private:
+  		char data_[header_length + max_body_length];
+  		std::size_t body_length_;
 };
 
 #endif // CHAT_MESSAGE_HPP
