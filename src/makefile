@@ -1,42 +1,42 @@
-CXX=g++
-CPPFLAGS=-I../asio-1.13.0/include
-CXXFLAGS=-Wall -g -std=c++11 
-GTKFLAGS = `/usr/bin/pkg-config gtkmm-3.0 --cflags --libs`
+#test: card.h card.cpp test.cpp shoe.h shoe.cpp hand.h hand.cpp player_struct.h player_struct.cpp player.h player.cpp dealer.h dealer.cpp
+#	g++ -o test test.cpp card.cpp shoe.cpp hand.cpp player.cpp dealer.cpp
 
-TARGETS=bjp bjd
+#clean:
+#	rm test
+
+CXX=g++
+
+CPPFLAGS=-I../asio-1.13.0/include
+CXXFLAGS=-Wall -g -std=c++11 -O0
+
+GTKLINKFLAGS=$(shell pkg-config --libs gtk+-2.0)
+GTKCOMPILEFLAGS=$(shell pkg-config --cflags gtk+-2.0)
+
+TARGETS=bjd bjp
 
 all:${TARGETS}
 
-blackjack: main.o mainwin.o card.o bjp.o bjd.o hand.o card.o shoe.o player.o dealer.o *.h
-	${CXX} $(CXXFLAGS) ${CPPFLAGS} -o blackjack main.o mainwin.o card.o bjp.o bjd.o shoe.o player.o dealer.o shoe.o $(GTKFLAGS)
+bjp:  bjp.cpp
+	${CXX} ${CXXFLAGS} ${GTKCOMPILEFLAGS} ${CPPFLAGS} -o $@ $< \
+           ${GTKLINKFLAGS} -lpthread 
 
-main.o: main.cpp *.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c main.cpp $(GTKFLAGS)
-
-mainwin.o: mainwin.cpp *.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c mainwin.cpp $(GTKFLAGS)
-
-hand.o: hand.cpp *.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c hand.cpp $(GTKFLAGS)
-
-card.o : card.cpp *.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c card.cpp $(GTKFLAGS)
-
-shoe.o : shoe.cpp *.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c shoe.cpp $(GTKFLAGS)
-	
-player.o : player.cpp *.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c player.cpp $(GTKFLAGS)
-	
-dealer.o : dealer.cpp *.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c dealer.cpp $(GTKFLAGS)
-
-
-bjp: bjp.cpp chat_message.hpp
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ $< -lpthread
 bjd: bjd.cpp chat_message.hpp
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ $< -lpthread
 
+card.o: card.cpp card.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+	
+shoe.o: shoe.cpp shoe.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+	
+hand.o: hand.cpp hand.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+	
+player.o: player.cpp player.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+	
+#dealer.o: dealer.cpp dealer.h
+#	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+
 clean:
-	-rm -f ${TARGETS}
-	-rm -f *gch *.o a.out ${TARGETS}
+	-rm -f ${TARGETS} blackjack.o
