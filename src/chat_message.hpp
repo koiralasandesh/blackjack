@@ -84,7 +84,7 @@ class chat_message {
     void encode_header() {
       char header[4 + 1] = "";
       std::sprintf(header, "%4d", static_cast<int>(body_length_));
-      std::memcpy(data_, header, header_length);
+      std::memcpy(data_, header, 4);
 
       char *p = data_+4; // skip over the int we just extracted
       std::memcpy(p,&ca,sizeof(client_action));
