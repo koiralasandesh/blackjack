@@ -10,7 +10,6 @@
 #include "hand.h"
 #include "shoe.h"
 #include "card.h"
-#include "player.h"
 
 using asio::ip::tcp;
 
@@ -18,24 +17,24 @@ typedef std::deque<chat_message> chat_message_queue;
 
 class hand {
 	public:
-      	hand () { 
-     		cards[0] = 0;
-     		cards[1] = 0;
-     		cards[2] = 0;
-   		}
+    hand () { 
+      cards[0] = 0;
+      cards[1] = 0;
+      cards[2] = 0;
+    }
    		int cards[3];  // this is just an example
 };
 
 class player {
 	public:
-  		std::string name;
-  		hand Hand;
+    std::string name;
+  	hand Hand;
    
  		player() {
      		std::cout << "Creating a new player " << std::endl;
-  		}
-  		virtual ~player() {}
-  		virtual void deliver(const chat_message& msg) = 0;
+  	}
+  	virtual ~player() {}
+  	virtual void deliver(const chat_message& msg) = 0;
 };
 
 typedef std::shared_ptr<player> player_ptr;
@@ -197,53 +196,53 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
 					table_.leave(shared_from_this());
 				}
 			});
-  		}
+  	}
 		tcp::socket socket_;
-  		blackjack_table& table_;
-  		chat_message read_msg_;
-  		chat_message_queue write_msgs_;
+    blackjack_table& table_;
+  	chat_message read_msg_;
+  	chat_message_queue write_msgs_;
 };
 
 class blackjack_game {
 	public:
-  		blackjack_game(asio::io_context& io_context, const tcp::endpoint& endpoint)
-    	: acceptor_(io_context, endpoint) {
-    		std::cout << "Creating a blackjack_game" << std::endl;
-    		do_accept();
-  		}
+  	blackjack_game(asio::io_context& io_context, const tcp::endpoint& endpoint)
+    : acceptor_(io_context, endpoint) {
+    	std::cout << "Creating a blackjack_game" << std::endl;
+    	do_accept();
+  	}
+  private:
+  	void do_accept() {
+    	acceptor_.async_accept([this](std::error_code ec, tcp::socket socket) {
+        if (!ec) {
+          std::make_shared<blackjack_player>(std::move(socket), table_)->start();
+        }
 
-	private:
-  		void do_accept() {
-    		acceptor_.async_accept([this](std::error_code ec, tcp::socket socket) {
-          		if (!ec) {
-            		std::make_shared<blackjack_player>(std::move(socket), table_)->start();
-          		}
+        do_accept();
+      });
+  	}
 
-          		do_accept();
-        	});
-  		}
-
-  		tcp::acceptor acceptor_;
-  		blackjack_table table_;
+  	tcp::acceptor acceptor_;
+  	blackjack_table table_;
 };
 
 int main(int argc, char* argv[]) {
-  	try {
-    	if (argc < 2) {
-      		std::cerr << "Usage: blackjack_game <port> [<port> ...]\n";
-      		return 1;
-    	}
-    	asio::io_context io_context;
+  try {
+    if (argc < 2) {
+      std::cerr << "Usage: blackjack_game <port> [<port> ...]\n";
+      	return 1;
+    }
+    asio::io_context io_context;
 
-    	std::list<blackjack_game> servers;
-    	for (int i = 1; i < argc; ++i) {
-      		tcp::endpoint endpoint(tcp::v4(), std::atoi(argv[i]));
-      		servers.emplace_back(io_context, endpoint);
+    std::list<blackjack_game> servers;
+    for (int i = 1; i < argc; ++i) {
+      tcp::endpoint endpoint(tcp::v4(), std::atoi(argv[i]));
+      servers.emplace_back(io_context, endpoint);
 		}
 
-    	io_context.run();
-	} catch (std::exception& e) {
-    	std::cerr << "Exception: " << e.what() << "\n";
-  	}
-  	return 0;
+    io_context.run();
+	}
+  catch (std::exception& e) {
+    std::cerr << "Exception: " << e.what() << "\n";
+  }
+  return 0;
 }
