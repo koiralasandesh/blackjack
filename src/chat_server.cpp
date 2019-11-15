@@ -10,7 +10,7 @@
 
 using asio::ip::tcp;
 
-typedef std::deque<chat_message> chat_message_queue;bjp
+typedef std::deque<chat_message> chat_message_queue;
 
 class chat_participant {
   public:
