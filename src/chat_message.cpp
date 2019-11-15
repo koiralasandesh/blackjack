@@ -1,13 +1,3 @@
-//
-// chat_message.hpp
-// ~~~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2019 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
 #ifndef CHAT_MESSAGE_HPP
 #define CHAT_MESSAGE_HPP
 
@@ -79,10 +69,11 @@ class chat_message {
       char header[header_length + 1] = "";
       std::strncat(header, data_, 4);
       body_length_ = std::atoi(header);
+      
       char *p = data_ + 4; // skip the integer
       std::memcpy(&ca,p,sizeof(client_action));
       std::memcpy(&gs,p+sizeof(client_action),sizeof(game_state));
-
+      
       if (body_length_ > max_body_length) {
         body_length_ = 0;
         return false;
