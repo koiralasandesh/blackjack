@@ -39,4 +39,4 @@ player.o: player.cpp player.h
 #	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
 
 clean:
-	-rm -f ${TARGETS} blackjack.o
+	-rm -f ${TARGETS} *.o
