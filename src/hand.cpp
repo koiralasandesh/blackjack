@@ -72,9 +72,7 @@ bool Hand::can_split() {
 			return true;		// hand is splittable if card face values are identical
 		}
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 
 int Hand::num_cards_in_hand(int which_hand) {

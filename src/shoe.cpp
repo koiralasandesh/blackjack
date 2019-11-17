@@ -13,6 +13,7 @@ Card* Shoe::get_shoe() {
 
 void Shoe::create_cards() {
 	int decks, suit, face, value = 1, card_count = 0;
+	_current_card = 311;
 	for (decks = 0; decks < 6; decks++) {
 		for (suit = 1; suit < 5; suit++) {
 			for (face = 1; face < 14; face++) {
@@ -72,4 +73,3 @@ void Shoe::print_cards() {
 }
 
 // written: Rebecca B 11/2
-

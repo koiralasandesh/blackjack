@@ -4,11 +4,11 @@
 // TO BE INSTANCED ONLY ONCE BY DEALER
 
 class Shoe {
-	private:
+	public:
 		//std::vector<Card> _shoe;
 		Card _shoe[312]; 			// max 312 cards in 6 decks
 		int _current_card = 311;	// index for shoe
-	public:
+	//public:
 		//std::vector<Card> get_shoe();
 		virtual ~Shoe();
 		Card* get_shoe();		// shoe getter

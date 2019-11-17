@@ -20,8 +20,8 @@ bjp:  bjp.cpp
 	${CXX} ${CXXFLAGS} ${GTKCOMPILEFLAGS} ${CPPFLAGS} -o $@ $< \
            ${GTKLINKFLAGS} -lpthread 
 
-bjd: bjd.cpp chat_message.hpp
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ $< -lpthread
+bjd: bjd.cpp chat_message.hpp card.o shoe.o hand.o
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ card.o shoe.o hand.o $< -lpthread
 
 card.o: card.cpp card.h
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<

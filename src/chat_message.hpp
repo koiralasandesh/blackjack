@@ -24,7 +24,9 @@ class client_action {
     bool doubleDown;
     bool join;
     bool name_valid;
-    char name[25]; 
+    char name[25];
+    int credits;
+    int bet;
 };
 
 class chat_message { 
