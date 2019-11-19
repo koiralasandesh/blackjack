@@ -11,6 +11,12 @@
 GtkWidget *fromView  = NULL;  // text from the chat server
 GtkWidget *dealerCards = NULL;
 GtkWidget *playerCards = NULL;
+GtkWidget *rules = NULL;
+GtkWidget *rules1 = NULL;
+GtkWidget *rules2 = NULL;
+GtkWidget *rules3 = NULL;
+GtkWidget *rules4 = NULL;
+
 
 using asio::ip::tcp;
 
@@ -286,12 +292,66 @@ static void betCallback(GtkWidget *widget, GdkEventButton *event, gpointer callb
       std::cerr << "not enough credits to place bet" << std::endl;
       msg.ca.bet = 0;
     }
-    std::cerr << "credits is " << msg.ca.credits << std::endl;
     msg.encode_header();
     assert(c);
     c->write(msg);
   }
    //gtk_text_buffer_set_text ( toBuffer, "", -1 );
+
+  
+}
+
+static void rulesCallback(GtkWidget *widget, GdkEventButton *event, gpointer callback_data) {
+  std::cerr << "rules button pressed: " << event->button << std::endl;
+  GtkWidget *rulesWindow = NULL;
+  //rulesWindow->set_title("Rules");
+  rulesWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  GtkWidget *rules = NULL;
+  rules = gtk_label_new (NULL);
+  gtk_label_set_text (GTK_LABEL(rules), "1. Hand sign must be used by player as guided by the dealer. Player are not allowed to touch cards.");
+  
+  GtkWidget *rules1 = NULL;
+  rules1 = gtk_label_new (NULL);
+  gtk_label_set_text (GTK_LABEL(rules1),"2. The minimum bet player can do in $1 and max bet is $5.");
+
+  GtkWidget *rules2 = NULL;
+  rules2 = gtk_label_new (NULL);
+  gtk_label_set_text (GTK_LABEL(rules2),"3. Will be payed 1.5 times the bet if player got blackjack.");
+
+  GtkWidget *rules3 = NULL;
+  rules3 = gtk_label_new (NULL);
+  gtk_label_set_text (GTK_LABEL(rules3),"4. Players are strictly restricted to count cards.");
+
+  GtkWidget *rules4 = NULL;
+  rules4 = gtk_label_new (NULL);
+  gtk_label_set_text (GTK_LABEL(rules4),"5. Dealer has to hit always till it reach soft 17.s");
+
+  GtkWidget *  rulesvbox = gtk_vbox_new (false, 10);
+  gtk_container_add(GTK_CONTAINER(rulesWindow), rulesvbox);
+
+  gtk_box_pack_start(GTK_BOX(rulesvbox),rules, TRUE,TRUE,0);
+  gtk_box_pack_start(GTK_BOX(rulesvbox),rules1, TRUE,TRUE,0);
+  gtk_box_pack_start(GTK_BOX(rulesvbox),rules2, TRUE,TRUE,0);
+  gtk_box_pack_start(GTK_BOX(rulesvbox),rules3, TRUE,TRUE,0);
+  gtk_box_pack_start(GTK_BOX(rulesvbox),rules4, TRUE,TRUE,0);
+
+  gtk_widget_show_all(rulesWindow);
+  /*
+  Rules_window *rules = new Rules_window();
+  rules->show();
+  
+  chat_message msg;
+  msg.body_length (0);
+  msg.ca.hit = false;
+  msg.ca.stand = false;
+  msg.ca.surrender = false;
+  msg.ca.split = false;
+  msg.ca.doubleDown = false;
+  msg.ca.name_valid = false;
+  msg.encode_header();
+  assert(c);  // this is a global class
+  c->write(msg);
+  */
 }
 
 int main(int argc, char *argv[]) {
@@ -302,7 +362,7 @@ int main(int argc, char *argv[]) {
 
   GtkWidget *window = NULL;
 
-  GtkWidget *hitButton,*joinButton,*standButton,*surrenderButton,*splitButton,*doubleDownButton, *betButton = NULL;
+  GtkWidget *hitButton,*joinButton,*standButton,*surrenderButton,*splitButton,*doubleDownButton, *betButton, *rulesButton = NULL;
   GtkWidget *toView  = NULL;  // text to the chat server
 
   GtkTextBuffer *toBuffer = NULL;
@@ -326,6 +386,7 @@ int main(int argc, char *argv[]) {
   surrenderButton = gtk_button_new_with_label("Surrender");
   splitButton = gtk_button_new_with_label("Split");
   doubleDownButton = gtk_button_new_with_label("Double Down");
+  rulesButton = gtk_button_new_with_label("Rules");
 
   GtkWidget *  vbox = gtk_vbox_new (false, 10);
   gtk_container_add(GTK_CONTAINER(window), vbox);
@@ -341,6 +402,8 @@ int main(int argc, char *argv[]) {
   gtk_box_pack_start(GTK_BOX(vbox),fromView, TRUE,TRUE,0);
   gtk_box_pack_start(GTK_BOX(vbox),dealerCards, TRUE,TRUE,0);
   gtk_box_pack_start(GTK_BOX(vbox),playerCards, TRUE,TRUE,0);
+  gtk_box_pack_start(GTK_BOX(vbox),rulesButton, TRUE,TRUE,0);
+
 
   g_signal_connect(G_OBJECT(hitButton), "button_press_event", G_CALLBACK(hitCallback), fromView);
   g_signal_connect(G_OBJECT(standButton), "button_press_event", G_CALLBACK(standCallback), fromView);
@@ -349,6 +412,7 @@ int main(int argc, char *argv[]) {
   g_signal_connect(G_OBJECT(doubleDownButton), "button_press_event", G_CALLBACK(doubleDownCallback), fromView);
   g_signal_connect(G_OBJECT(joinButton), "button_press_event", G_CALLBACK(joinCallback), toView);
   g_signal_connect(G_OBJECT(betButton), "button_press_event", G_CALLBACK(betCallback), toView);
+  g_signal_connect(G_OBJECT(rulesButton), "button_press_event", G_CALLBACK(rulesCallback), fromView);
 
   gtk_widget_show_all(window);
   g_signal_connect(G_OBJECT(window), "delete_event", G_CALLBACK(delete_event), NULL);

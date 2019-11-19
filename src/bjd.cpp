@@ -10,6 +10,7 @@
 #include "hand.h"
 #include "shoe.h"
 #include "card.h"
+//#include "rules.h"
 
 using asio::ip::tcp;
 
@@ -163,6 +164,7 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
               strcpy(read_msg_.body(), m.c_str());
               read_msg_.body_length(strlen(read_msg_.body()));
               self->name = std::string (read_msg_.ca.name);
+              read_msg_.gs.credits = self->credits;
           }
           if (self->name > "") {  // quick way to see if they have entered a name 
             if (read_msg_.ca.hit) { // also need to check in order, since everyone has a turn

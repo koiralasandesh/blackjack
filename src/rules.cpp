@@ -1,5 +1,4 @@
 #include "rules.h"
-#include "mainwin.h"
 #include <iostream>
 
 Rules_window::Rules_window() : box(Gtk::ORIENTATION_VERTICAL)
