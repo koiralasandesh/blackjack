@@ -145,6 +145,7 @@ static void hitCallback(GtkWidget *widget, GdkEventButton *event, gpointer callb
   chat_message msg;
   msg.body_length (0);
   msg.ca.hit = true;
+  msg.ca.bet = false;
   msg.ca.stand = false;
   msg.ca.surrender = false;
   msg.ca.split = false;
@@ -160,6 +161,7 @@ static void standCallback(GtkWidget *widget, GdkEventButton *event, gpointer cal
   chat_message msg;
   msg.body_length (0);
   msg.ca.hit = false;
+  msg.ca.bet = false;
   msg.ca.stand = true;
   msg.ca.surrender = false;
   msg.ca.split = false;

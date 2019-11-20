@@ -28,7 +28,7 @@ class hand {
 class player {
   public:
     std::string name;
-    int bet;
+    int bet = 0;
     int credits;
     Hand player_hand;
     player() : credits{100} {
@@ -176,7 +176,6 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
                 // call the dealer class with some kind of method and argument
                 m = self->name + " has asked for a hit.";
                 
-                
                 self->player_hand.add_card_hand(table_.Dealer.shoe.next_card(), 0);
                 table_.Dealer.shoe.remove_card();
 
@@ -197,27 +196,33 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
               else {
                 m = self->name + " has not placed a bet.";
               }
+              std::cerr << "self->bet = " << self->bet << std::endl;
               strcpy(read_msg_.body(), m.c_str());
               read_msg_.body_length(strlen(read_msg_.body()));
               // also set read_msg.gs.XXX to whatever needs to go to the clients
             }
-            if(read_msg_.ca.bet) {
+            if (read_msg_.ca.bet) {
               std::string m;
-              if (read_msg_.ca.bet_amt == 0) {
-                m = "invalid bet. bet must be from 1 to 5 credits.";
-              }
-              else if (self->credits <= 0 || self->bet > self->credits) {
-                m = self->name + "does not have enough credits.";
-              }
-              else if (self->credits < 20) {
-                m = self->name + "has less than 20 credits.";
+              if (self->bet) {
+                m = self->name + " already has a bet.";
               }
               else {
-                std::string m = self->name + " has placed a bet.";
-                self->bet = read_msg_.ca.bet_amt;
-                self->credits -= self->bet;
-                std::cerr << "bet placed: " << self->bet << std::endl;
-                std::cerr << "remaining credits: " << self->credits << std::endl;
+                if (read_msg_.ca.bet_amt == 0) {
+                  m = "invalid bet. bet must be from 1 to 5 credits.";
+                }
+                else if (self->credits <= 0 || read_msg_.ca.bet_amt > self->credits) {
+                  m = self->name + "does not have enough credits.";
+                }
+                else if (self->credits < 20) {
+                  m = self->name + "has less than 20 credits.";
+                }
+                else {
+                  std::string m = self->name + " has placed a bet.";
+                  self->bet = read_msg_.ca.bet_amt;
+                  self->credits -= self->bet;
+                  std::cerr << "bet placed: " << self->bet << std::endl;
+                  std::cerr << "remaining credits: " << self->credits << std::endl;
+                }
               }
               strcpy(read_msg_.body(), m.c_str());
               read_msg_.body_length(strlen(read_msg_.body()));
