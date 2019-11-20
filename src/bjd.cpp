@@ -30,6 +30,7 @@ class player {
     std::string name;
     int bet = 0;
     int credits;
+    bool joined = false;
     Hand player_hand;
     player() : credits{100} {
         std::cout << "Creating a new player " << std::endl;
@@ -145,7 +146,7 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
     }
 
     void do_read_body() {
-      auto self(shared_from_this());
+      auto self(shared_from_this());  // this current player
       asio::async_read(socket_,
       asio::buffer(read_msg_.body(), read_msg_.body_length()), [this, self](std::error_code ec, std::size_t /*length*/) {
         if (!ec) {
@@ -157,17 +158,14 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
           read_msg_.gs.player_cards_valid = false;
           // is it a join
           if (read_msg_.ca.join && read_msg_.ca.name_valid) {
-              std::cout << "the name is " << read_msg_.ca.name << std::endl;
+            if (!self->joined) {
+              std::cout << "Player name is " << read_msg_.ca.name << std::endl;
               std::string m = std::string(read_msg_.ca.name) + " has joined.";
               strcpy(read_msg_.body(), m.c_str());
               read_msg_.body_length(strlen(read_msg_.body()));
               self->name = std::string (read_msg_.ca.name);
-              /*
-              read_msg_.gs.player_credits = self->credits;
-              std::cout << "\nread_msg_.gs.player_credits = " << read_msg_.gs.player_credits << std::endl;
-              std::cout << "self->credits = " << self->credits << std::endl;
-              */
-              
+              self->joined = true;
+            }
           }
           if (self->name > "") {  // quick way to see if they have entered a name 
             if (read_msg_.ca.hit) { // also need to check in order, since everyone has a turn
