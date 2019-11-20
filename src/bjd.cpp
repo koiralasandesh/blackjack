@@ -10,7 +10,6 @@
 #include "hand.h"
 #include "shoe.h"
 #include "card.h"
-//#include "rules.h"
 
 using asio::ip::tcp;
 
@@ -50,7 +49,6 @@ class dealer {
       std::cout << "Creating a dealer" << std::endl;
       shoe.create_cards();
       shoe.shuffle();
-      std::cout << shoe.next_card().get_value() << std::endl;
       current_player = NULL;
       card_idx = 0;
     }
@@ -164,7 +162,12 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
               strcpy(read_msg_.body(), m.c_str());
               read_msg_.body_length(strlen(read_msg_.body()));
               self->name = std::string (read_msg_.ca.name);
-              read_msg_.gs.credits = self->credits;
+              /*
+              read_msg_.gs.player_credits = self->credits;
+              std::cout << "\nread_msg_.gs.player_credits = " << read_msg_.gs.player_credits << std::endl;
+              std::cout << "self->credits = " << self->credits << std::endl;
+              */
+              
           }
           if (self->name > "") {  // quick way to see if they have entered a name 
             if (read_msg_.ca.hit) { // also need to check in order, since everyone has a turn
@@ -191,11 +194,21 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
               }
               // also set read_msg.gs.XXX to whatever needs to go to the clients
             }
+            if(read_msg_.ca.bet) {
+              std::string m = self->name + " has placed a bet.";
+              strcpy(read_msg_.body(), m.c_str());
+              read_msg_.body_length(strlen(read_msg_.body()));
+              
+              self->bet = read_msg_.ca.bet_amt;
+              self->credits -= self->bet;
+              std::cerr << "bet placed: " << self->bet;
+              std::cerr << "remaining credits: " << self->credits;
+            }
           }
 
           // display the cards if everyone has joined
           if (table_.all_players_have_a_name ()) {
-            /*
+            /*  deal 2 cards to everyone
             table_.Dealer.deal();
             read_msg_.gs.dealer_cards_valid = true;
             read_msg_.gs.dealer_cards[0] = table_.Dealer.Hand.cards[0];

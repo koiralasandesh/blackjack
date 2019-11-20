@@ -12,7 +12,6 @@ class game_state {
     int dealer_cards[3];
     bool player_cards_valid;
     int player_cards[2][3]; // [players][cards]
-    int credits;
     // note you can't use std::string or pointers
 };
 
@@ -26,8 +25,8 @@ class client_action {
     bool join;
     bool name_valid;
     char name[25];
-    int credits;
-    int bet;
+    bool bet;
+    int bet_amt;
 };
 
 class chat_message { 
