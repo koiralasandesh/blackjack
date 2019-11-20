@@ -193,7 +193,7 @@ static void splitCallback(GtkWidget *widget, GdkEventButton *event, gpointer cal
   msg.ca.hit = false;
   msg.ca.stand = false;
   msg.ca.surrender = false;
-  msg.ca.bet = true;
+  msg.ca.bet = false;
   msg.ca.split = true;
   msg.ca.doubleDown = false;
   msg.ca.name_valid = false;
@@ -209,7 +209,7 @@ static void doubleDownCallback(GtkWidget *widget, GdkEventButton *event, gpointe
   msg.ca.hit = false;
   msg.ca.stand = false;
   msg.ca.surrender = false;
-  msg.ca.bet = true;
+  msg.ca.bet = false;
   msg.ca.split = false;
   msg.ca.doubleDown = true;
   msg.ca.name_valid = false;
@@ -241,6 +241,7 @@ static void joinCallback(GtkWidget *widget, GdkEventButton *event, gpointer call
     msg.ca.stand = false;
     msg.ca.surrender = false;
     msg.ca.bet = false;
+    msg.ca.split = false;
     msg.ca.join = true;
     msg.ca.name_valid = true;
     if (strlen(text) < sizeof(msg.ca.name)) {
@@ -280,14 +281,17 @@ static void betCallback(GtkWidget *widget, GdkEventButton *event, gpointer callb
   msg.ca.stand = false;
   msg.ca.surrender = false;
   msg.ca.name_valid = false;
+  msg.ca.split = false;
   msg.ca.bet = true;
   msg.ca.bet_amt = atoi(text);
-  while(atoi(text) > 5 && atoi(text) < 1) {
+  /*
+  while (atoi(text) > 5 || atoi(text) < 1) {
     std::cerr << "bet must be from 1 to 5 credits" << std::endl;
     msg.ca.bet_amt = atoi(text);
+    
   }
   //std::cout << "credit_amt = " << credit_amt << std::endl;
-  /*
+  
   if (bet_amt >= 1) {
     if (bet_amt <= msg.ca.credits) {
       msg.ca.bet = bet_amt;

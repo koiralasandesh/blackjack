@@ -171,38 +171,61 @@ class blackjack_player : public player, public std::enable_shared_from_this<blac
           }
           if (self->name > "") {  // quick way to see if they have entered a name 
             if (read_msg_.ca.hit) { // also need to check in order, since everyone has a turn
-              // call the dealer class with some kind of method and argument
-              std::string m = self->name + " has asked for a hit.";
+              std::string m;
+              if (self->bet) {
+                // call the dealer class with some kind of method and argument
+                m = self->name + " has asked for a hit.";
+                
+                
+                self->player_hand.add_card_hand(table_.Dealer.shoe.next_card(), 0);
+                table_.Dealer.shoe.remove_card();
+
+                std::cout << "dealt card is ";
+                std::cout << "value->" << table_.Dealer.shoe.next_card().get_value() << ", ";
+                std::cout << "face->" << table_.Dealer.shoe.next_card().get_face() << ", ";
+                std::cout << "suit->" << table_.Dealer.shoe.next_card().get_suit() << std::endl;
+                std::cout << "shoe size is now " << table_.Dealer.shoe._current_card + 1 << std::endl;
+
+                // refilling shoe
+                if (table_.Dealer.shoe._current_card <= 0) {
+                  std::cout << "refilling shoe... ";
+                  table_.Dealer.shoe.create_cards();
+                  table_.Dealer.shoe.shuffle();
+                  std::cout << "shoe refilled." << std::endl;
+                }
+              }
+              else {
+                m = self->name + " has not placed a bet.";
+              }
               strcpy(read_msg_.body(), m.c_str());
               read_msg_.body_length(strlen(read_msg_.body()));
-              
-              self->player_hand.add_card_hand(table_.Dealer.shoe.next_card(), 0);
-              table_.Dealer.shoe.remove_card();
-
-              std::cout << "dealt card is ";
-              std::cout << "value->" << table_.Dealer.shoe.next_card().get_value() << ", ";
-              std::cout << "face->" << table_.Dealer.shoe.next_card().get_face() << ", ";
-              std::cout << "suit->" << table_.Dealer.shoe.next_card().get_suit() << std::endl;
-              std::cout << "shoe size is now " << table_.Dealer.shoe._current_card + 1 << std::endl;
-
-              // refilling shoe
-              if (table_.Dealer.shoe._current_card <= 0) {
-                std::cout << "refilling shoe... ";
-                table_.Dealer.shoe.create_cards();
-                table_.Dealer.shoe.shuffle();
-                std::cout << "shoe refilled." << std::endl;
-              }
               // also set read_msg.gs.XXX to whatever needs to go to the clients
             }
             if(read_msg_.ca.bet) {
-              std::string m = self->name + " has placed a bet.";
+              std::string m;
+              if (read_msg_.ca.bet_amt == 0) {
+                m = "invalid bet. bet must be from 1 to 5 credits.";
+              }
+              else if (self->credits <= 0 || self->bet > self->credits) {
+                m = self->name + "does not have enough credits.";
+              }
+              else if (self->credits < 20) {
+                m = self->name + "has less than 20 credits.";
+              }
+              else {
+                std::string m = self->name + " has placed a bet.";
+                self->bet = read_msg_.ca.bet_amt;
+                self->credits -= self->bet;
+                std::cerr << "bet placed: " << self->bet << std::endl;
+                std::cerr << "remaining credits: " << self->credits << std::endl;
+              }
               strcpy(read_msg_.body(), m.c_str());
               read_msg_.body_length(strlen(read_msg_.body()));
-              
-              self->bet = read_msg_.ca.bet_amt;
-              self->credits -= self->bet;
-              std::cerr << "bet placed: " << self->bet;
-              std::cerr << "remaining credits: " << self->credits;
+            }
+            if(read_msg_.ca.split) {
+              std::string m = self->name + " has requested to split.";
+              strcpy(read_msg_.body(), m.c_str());
+              read_msg_.body_length(strlen(read_msg_.body()));
             }
           }
 
