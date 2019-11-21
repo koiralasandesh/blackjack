@@ -16,13 +16,16 @@ TARGETS=bjd bjp
 
 all:${TARGETS}
 
-bjp:  bjp.cpp
-	${CXX} ${CXXFLAGS} ${GTKCOMPILEFLAGS} ${CPPFLAGS} -o $@ $< \
+bjp:  bjp.cpp hand.o card.o
+	${CXX} ${CXXFLAGS} ${GTKCOMPILEFLAGS} ${CPPFLAGS} $< hand.o card.o -o $@  \
            ${GTKLINKFLAGS} -lpthread 
 
-bjd: bjd.cpp chat_message.hpp card.o shoe.o hand.o
+bjd: bjd.cpp chat_message.o card.o shoe.o hand.o
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ card.o shoe.o hand.o $< -lpthread
 
+chat_message.o: chat_message.hpp hand.o
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+  
 card.o: card.cpp card.h
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
 	
@@ -31,12 +34,6 @@ shoe.o: shoe.cpp shoe.h
 	
 hand.o: hand.cpp hand.h
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
-	
-player.o: player.cpp player.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
-	
-#dealer.o: dealer.cpp dealer.h
-#	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
 
 clean:
 	-rm -f ${TARGETS} *.o
