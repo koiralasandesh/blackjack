@@ -209,7 +209,7 @@ static void doubleDownCallback(GtkWidget *widget, GdkEventButton *event, gpointe
   chat_message msg;
   msg.body_length (0);
   msg.ca.hit = false;
-  msg.ca.stand = false;
+  msg.ca.stand = true;
   msg.ca.surrender = false;
   msg.ca.bet = false;
   msg.ca.split = false;
@@ -242,6 +242,7 @@ static void joinCallback(GtkWidget *widget, GdkEventButton *event, gpointer call
     msg.ca.hit = false;
     msg.ca.stand = false;
     msg.ca.surrender = false;
+    msg.ca.doubleDown = false;
     msg.ca.bet = false;
     msg.ca.split = false;
     msg.ca.join = true;
@@ -280,6 +281,7 @@ static void betCallback(GtkWidget *widget, GdkEventButton *event, gpointer callb
   chat_message msg;
   msg.body_length (0);
   msg.ca.hit = false;
+  msg.ca.doubleDown = false;
   msg.ca.stand = false;
   msg.ca.surrender = false;
   msg.ca.name_valid = false;
