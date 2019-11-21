@@ -4,14 +4,15 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include "hand.h"
 
 // these two classes are examples of sending an entire structure as part of the header
 class game_state {
   public:
     bool dealer_cards_valid;
-    int dealer_cards[3];
+    Hand dealer_hand;
     bool player_cards_valid;
-    int player_cards[2][3]; // [players][cards]
+    Hand player_hand; // [players][cards]
     // note you can't use std::string or pointers
 };
 
