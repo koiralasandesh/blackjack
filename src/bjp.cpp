@@ -70,7 +70,7 @@ class chat_client {
             std::memcpy ( &outline[1], read_msg_.body(), read_msg_.body_length() );
             gtk_label_set_text (GTK_LABEL(fromView), outline);
 
-            std::string p = "player " + std::to_string (read_msg_.gs.player_cards[0][0]) + " " +
+            /*std::string p = "player " + std::to_string (read_msg_.gs.player_cards[0][0]) + " " +
                                         std::to_string (read_msg_.gs.player_cards[0][1]) + " " +
                                         std::to_string (read_msg_.gs.player_cards[0][2]) + '\n' +
                                         std::to_string (read_msg_.gs.player_cards[1][0]) + " " +
@@ -79,17 +79,17 @@ class chat_client {
 
             std::string d = "dealer " + std::to_string (read_msg_.gs.dealer_cards[0]) + " " +
                                         std::to_string (read_msg_.gs.dealer_cards[1]) + " " +
-                                        std::to_string (read_msg_.gs.dealer_cards[2]);
+                                        std::to_string (read_msg_.gs.dealer_cards[2]);*/
 
             if (read_msg_.gs.player_cards_valid) {
-              gtk_label_set_text (GTK_LABEL(playerCards),p.c_str() );
+              //gtk_label_set_text (GTK_LABEL(playerCards),p.c_str() );
             }
             else {
               gtk_label_set_text (GTK_LABEL(playerCards),"waiting");
             }
 
             if (read_msg_.gs.dealer_cards_valid) {
-              gtk_label_set_text (GTK_LABEL(dealerCards),d.c_str() );
+              //gtk_label_set_text (GTK_LABEL(dealerCards),d.c_str() );
             }
             else {
               gtk_label_set_text (GTK_LABEL(dealerCards),"waiting");
