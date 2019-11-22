@@ -327,7 +327,7 @@ private:
 
                            if (read_msg_.ca.hit)
                            { // also need to check in order, since everyone has a turn
-                             std::string m;
+                             std::string m; // m is the string to be displayed on client window
 
                              if (!self->bet)
                              {
@@ -389,8 +389,8 @@ private:
                              strcpy(read_msg_.body(), m.c_str());
                              read_msg_.body_length(strlen(read_msg_.body()));
                              std::cerr << "self->bet = " << self->bet << std::endl;
-                             strcpy(read_msg_.body(), m.c_str());
-                             read_msg_.body_length(strlen(read_msg_.body()));
+                             /*strcpy(read_msg_.body(), m.c_str());
+                             read_msg_.body_length(strlen(read_msg_.body()));*/
                              // also set read_msg.gs.XXX to whatever needs to go to the clients
                            }
 
@@ -506,11 +506,26 @@ private:
 
                            if (read_msg_.ca.surrender)
                            {
-                             std::string m = self->name + " has requested to surrender.";
+                             std::string m;
+                             m = self->name + " has requested to surrender.";
                              //we can some functions in hand to clear its contents in _Hand array
 
                              //bet deducted in player
                              //clear dealer hand
+                            if(self->player_hand.get_hand_value(0) == 21){
+                              // say 'cannot surrender, has blackjack'
+                              // call play()?
+                              std::cerr << "Your already have 21 so cannot surrender  = " << self->player_hand.get_hand_value(0) << std::endl;
+                                 //go to dealer function play
+                                 self->credits = table_.Dealer.play();
+                                 m = "Your already have 21 so cannot surrender. round is over starting another round. place another bet";
+                                 self->bet = 0;
+                                 std::cerr << "self->bet = " << self->bet << std::endl;
+                            }
+                            else{ 
+                            table_.Dealer.round  = true;
+                            self->credits += 0.5 * self->bet;
+                            }
                              strcpy(read_msg_.body(), m.c_str());
                              read_msg_.body_length(strlen(read_msg_.body()));
                            }
