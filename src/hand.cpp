@@ -46,7 +46,7 @@ int Hand::get_hand_value(int which_hand) {
 
 void Hand::set_hand_value(int which_hand) {
 	int i;
-	_hand_value = 0;
+	//_hand_value = 0;
 	_split_value = 0;
 	if (which_hand) {
 		for (i = _split_index-1; i >= 0; i--) {
@@ -54,9 +54,12 @@ void Hand::set_hand_value(int which_hand) {
 		}
 	}
 	else {
+		/*
 		for (i = _hand_index-1; i >= 0; i--) {
 			_hand_value += _hand[i].get_value();
 		}
+		*/
+		_hand_value += _hand[_hand_index-1].get_value();
 	}
 	/*
 	// Vector version
@@ -64,6 +67,15 @@ void Hand::set_hand_value(int which_hand) {
 		_total_value += c.get_value();
 	}
 	*/
+}
+// check the hand index after card is added
+int Hand::get_hand_index(int which_hand){
+	if (which_hand) {
+		return _hand_index;
+	}
+	else {
+		return _hand_index;
+	}
 }
 
 bool Hand::can_split() {
@@ -94,6 +106,9 @@ void Hand::reset_hands() {
 		_split_hand[i].set_suit(NO_SUIT);
 		_split_hand[i].set_face(NO_FACE);
 	}
+	_hand_index = 0;
+	
+	_hand_value = 0;
 }
 /*
 void Hand::split_cards() {

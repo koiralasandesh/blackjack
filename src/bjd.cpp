@@ -48,19 +48,33 @@ class dealer
 {
 public:
   Shoe shoe;
-  int credits;
-  dealer() : credits{500}
+  int dealer_credits;
+  Hand dealer_hand;
+  bool round = false;
+  dealer() : dealer_credits{500}
   {
     std::cout << "Creating a dealer" << std::endl;
     shoe.create_cards();
     shoe.shuffle();
     current_player = NULL;
     card_idx = 0;
+    //added card in dealer hand as soon as player is joined
+    std::cerr << "dealer hand index: " << dealer_hand.get_hand_index(0) << std::endl;
+    dealer_hand.add_card_hand(shoe.next_card(), 0);
+    dealer_hand.set_hand_value(0);
+    std::cerr << dealer_hand.get_hand_value(0) << std::endl;
+    shoe.remove_card();
+
+    std::cerr << "dealer hand index: " << dealer_hand.get_hand_index(0) << std::endl;
+    dealer_hand.add_card_hand(shoe.next_card(), 0);
+    dealer_hand.set_hand_value(0);
+    std::cerr << dealer_hand.get_hand_value(0) << std::endl;
+    shoe.remove_card();
   }
   /*
     void deal() {
       Hand.cards[card_idx] = 8;
-      card_idx++;
+      card_idx++;//
       if (card_idx > 2) {
         card_idx = 0;
       }
@@ -72,8 +86,85 @@ public:
   }
   player_ptr current_player;
   //hand Hand;
-  Hand dealer_hand;
+  /*
+  current_player->player_hand.add_card_hand(shoe.next_card(), 0);
+    current_player->player_hand.set_hand_value(0);
+    std::cerr << current_player->player_hand.get_hand_value(0) << std::endl;
+    shoe.remove_card();
+    current_player->player_hand.add_card_hand(shoe.next_card(), 0);
+    current_player->player_hand.set_hand_value(0);
+    std::cerr << current_player->player_hand.get_hand_value(0) << std::endl;
+    shoe.remove_card();
+    */
+
   int card_idx;
+  /**/
+  int play()
+  {
+    if (current_player == NULL)
+    {
+      std::cerr << "current player is null" << std::endl;
+    }
+    //next_player();
+    //FIRST DEALER MUST KEEP HITTING ON ITS HAND TILL IT OVER 17
+    //ONCE TOTAL CARD VALUE IS OVER 17 CHCEK IF ITS 21 OR OVER 21
+    //OVER 21 PLAYER AUTOMATICALLY WINS SIMILARLY WE HAD DONE SAME FOR PLAYER WHILE HITTING IF OVER 21 DEALER AUTOMATICALLY
+    //WINS AND DOESNT HAVE TO PLAY
+    //IF BOTH ARE 21 THEN TIE
+    //OTHER THAN THAT COMPARE BOTH VALUES AND GREATER WINS
+    //
+
+    if (current_player->player_hand.get_hand_value(0) > 21)
+    {
+      dealer_credits += current_player->bet;
+      std::cerr << "dealer credits " << dealer_credits << std::endl;
+    }
+    else
+    {
+      while (dealer_hand.get_hand_value(0) < 17)
+      {
+        std::cerr << dealer_hand.get_hand_index(0) << std::endl;
+        dealer_hand.add_card_hand(shoe.next_card(), 0);
+        dealer_hand.set_hand_value(0);
+        std::cerr << dealer_hand.get_hand_value(0) << std::endl;
+        shoe.remove_card();
+      }
+
+      if (dealer_hand.get_hand_value(0) > 21)
+      {
+        current_player->credits += 2 * current_player->bet;
+        dealer_credits -= current_player->bet;
+        //player wins automatically 2.5 times bet added to player credits
+      }
+      else if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(0))
+      {
+        current_player->credits += current_player->bet;
+        //tie bet added back to player credits go for next round
+      }
+      else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(0))
+      {
+        //dealer wins and bet added to its credit
+        dealer_credits += current_player->bet;
+      }
+      else
+      {
+
+        if (current_player->player_hand.get_hand_value(0) == 21)
+        { //if player has blackjack
+          current_player->credits += 2.5 * current_player->bet;
+        }
+        else
+        { //player wins and 2*bet added to its credit
+          current_player->credits += 2 * current_player->bet;
+        }
+      }
+      //printing player credits
+      std::cerr << "player credits = " << current_player->credits << std::endl;
+    }
+
+    round = true;
+    return current_player->credits;
+  }
 };
 
 class blackjack_table
@@ -180,16 +271,33 @@ private:
                          // Here is where messages arrive from the client
                          // this is where the design makes it easy or hard
                          // ignore anything in the message body
+
                          read_msg_.body_length(0);
                          read_msg_.gs.dealer_cards_valid = false;
                          read_msg_.gs.player_cards_valid = false;
                          // is it a join
                          if (read_msg_.ca.join && read_msg_.ca.name_valid)
                          {
+                           std::cerr << self->joined << std::endl;
                            if (!self->joined)
                            {
+                             table_.Dealer.next_player(self);
                              std::cout << "Player name is " << read_msg_.ca.name << std::endl;
                              std::string m = std::string(read_msg_.ca.name) + " has joined.";
+
+                             //added card in player hand as soon as player is joined
+                             std::cerr << "player hand index: " << self->player_hand.get_hand_index(0) << std::endl;
+                             self->player_hand.add_card_hand(table_.Dealer.shoe.next_card(), 0);
+                             self->player_hand.set_hand_value(0);
+                             std::cerr << self->player_hand.get_hand_value(0) << std::endl;
+                             table_.Dealer.shoe.remove_card();
+
+                             std::cerr << "player hand index: " << self->player_hand.get_hand_index(0) << std::endl;
+                             self->player_hand.add_card_hand(table_.Dealer.shoe.next_card(), 0);
+                             self->player_hand.set_hand_value(0);
+                             std::cerr << self->player_hand.get_hand_value(0) << std::endl;
+                             table_.Dealer.shoe.remove_card();
+
                              strcpy(read_msg_.body(), m.c_str());
                              read_msg_.body_length(strlen(read_msg_.body()));
                              self->name = std::string(read_msg_.ca.name);
@@ -198,23 +306,77 @@ private:
                          }
                          if (self->name > "")
                          { // quick way to see if they have entered a name
+
+                           //if condition to check round is over or not
+                           /*if (table_.Dealer.round)
+                           {
+                             self->player_hand.reset_hands();
+                             table_.Dealer.dealer_hand.reset_hands();
+                             read_msg_.ca.hit = false;
+                             read_msg_.ca.bet = false;
+                             read_msg_.ca.stand = false;
+                             read_msg_.ca.surrender = false;
+                             read_msg_.ca.split = false;
+                             read_msg_.ca.doubleDown = false;
+                             read_msg_.ca.name_valid = false;
+                             
+                             strcpy(read_msg_.body(), m.c_str());
+                             read_msg_.body_length(strlen(read_msg_.body()));
+                             table_.Dealer.round = false;
+                           }*/
+
                            if (read_msg_.ca.hit)
                            { // also need to check in order, since everyone has a turn
                              std::string m;
-                             if (self->bet)
+
+                             if (!self->bet)
                              {
+                               m = self->name + " has not placed a bet.";
+                             }
+                             /*
+                             else if (read_msg_.ca.doubleDown)
+                             {
+                               std::cerr << "can't hit after double down " << self->bet << std::endl;
+                             }
+                             */
+                             else
+                             {
+
                                // call the dealer class with some kind of method and argument
                                m = self->name + " has asked for a hit.";
 
+                               std::cerr << "player hand index: " << self->player_hand.get_hand_index(0) << std::endl;
                                self->player_hand.add_card_hand(table_.Dealer.shoe.next_card(), 0);
-                               table_.Dealer.shoe.remove_card();
+                               self->player_hand.set_hand_value(0);
 
                                std::cout << "dealt card is ";
                                std::cout << "value->" << table_.Dealer.shoe.next_card().get_value() << ", ";
                                std::cout << "face->" << table_.Dealer.shoe.next_card().get_face() << ", ";
                                std::cout << "suit->" << table_.Dealer.shoe.next_card().get_suit() << std::endl;
                                std::cout << "shoe size is now " << table_.Dealer.shoe._current_card + 1 << std::endl;
+                               table_.Dealer.shoe.remove_card();
 
+                               //printing hand value of player
+                               std::cerr << "printing hand value of player = " << self->player_hand.get_hand_value(0) << std::endl;
+                               if (self->player_hand.get_hand_value(0) == 21)
+                               {
+                                 std::cerr << "Your already have 21  = " << self->player_hand.get_hand_value(0) << std::endl;
+                                 //go to dealer function play
+                                 self->credits = table_.Dealer.play();
+                                 m = "round is over starting another round. place another bet";
+                                 self->bet = 0;
+                                 std::cerr << "self->bet = " << self->bet << std::endl;
+                               }
+                               else if (self->player_hand.get_hand_value(0) > 21)
+                               {
+                                 std::cerr << "Your are over 21 so busted dealer wins automatically  = " << self->player_hand.get_hand_value(0) << std::endl;
+                                 //can end the round adding credits to dealer
+                                 self->credits = table_.Dealer.play();
+                                 self->bet = 0;
+                                 m = "round is over starting another round. place another bet";
+                                 std::cerr << "self->bet = " << self->bet << std::endl;
+                               }
+                               //table_.Dealer.shoe.remove_card();
                                // refilling shoe
                                if (table_.Dealer.shoe._current_card <= 0)
                                {
@@ -224,15 +386,14 @@ private:
                                  std::cout << "shoe refilled." << std::endl;
                                }
                              }
-                             else
-                             {
-                               m = self->name + " has not placed a bet.";
-                             }
+                             strcpy(read_msg_.body(), m.c_str());
+                             read_msg_.body_length(strlen(read_msg_.body()));
                              std::cerr << "self->bet = " << self->bet << std::endl;
                              strcpy(read_msg_.body(), m.c_str());
                              read_msg_.body_length(strlen(read_msg_.body()));
                              // also set read_msg.gs.XXX to whatever needs to go to the clients
                            }
+
                            if (read_msg_.ca.bet)
                            {
                              std::string m;
@@ -266,6 +427,7 @@ private:
                              strcpy(read_msg_.body(), m.c_str());
                              read_msg_.body_length(strlen(read_msg_.body()));
                            }
+
                            if (read_msg_.ca.split)
                            {
                              std::string m = self->name + " has requested to split.";
@@ -275,9 +437,6 @@ private:
 
                            if (read_msg_.ca.doubleDown)
                            {
-                             //read_msg_.ca.doubleDown = true;
-                             //std::string m = self->name + " has requested to doubleDown.";
-
                              // check bet , then double it
                              std::string m;
                              if (!self->bet)
@@ -285,7 +444,7 @@ private:
                                //m = "invalid bet. bet must be from 1 to 5 credits.";
                                std::cerr << "Place the bet first." << self->bet << std::endl;
                              }
-                             else
+                             else if (self->player_hand.get_hand_index(0) - 1 == 1)
                              {
                                //std::string m = self->name + " has placed a bet.";
                                self->bet = 2 * self->bet;
@@ -293,7 +452,9 @@ private:
                                std::cerr << "bet has been doubled: " << self->bet << std::endl;
                                std::cerr << "remaining credits: " << self->credits << std::endl;
 
+                               std::cerr << "hand index: " << self->player_hand.get_hand_index(0) << std::endl;
                                self->player_hand.add_card_hand(table_.Dealer.shoe.next_card(), 0);
+                               self->player_hand.set_hand_value(0);
                                table_.Dealer.shoe.remove_card();
 
                                std::cout << "dealt card is ";
@@ -301,6 +462,9 @@ private:
                                std::cout << "face->" << table_.Dealer.shoe.next_card().get_face() << ", ";
                                std::cout << "suit->" << table_.Dealer.shoe.next_card().get_suit() << std::endl;
                                std::cout << "shoe size is now " << table_.Dealer.shoe._current_card + 1 << std::endl;
+
+                               //printing hand value of player
+                               std::cerr << "printing hand value of player = " << self->player_hand.get_hand_value(0) << std::endl;
 
                                if (table_.Dealer.shoe._current_card <= 0)
                                {
@@ -310,52 +474,63 @@ private:
                                  std::cout << "shoe refilled." << std::endl;
                                }
                              }
+                             else
+                             {
+                               std::cerr << "You cannot double down after you hit card. hand size is: " << self->player_hand.get_hand_index(0) << std::endl;
+                             }
                            }
-
                            //strcpy(read_msg_.body(), m.c_str());
                            //read_msg_.body_length(strlen(read_msg_.body()));
 
                            if (read_msg_.ca.stand)
                            {
-                             //read_msg_.ca.stand = true;
-
                              //now is dealer turn maybe method in dealer class to get card in its hand till less then 17 then get total and check with player
                              std::string m;
                              if (read_msg_.ca.doubleDown) //stand has following string if doubleDown is clicked
                              {
                                m = self->name + " has requested to doubleDown.";
                              }
-                             m = self->name + " has requested to stand.";
+                             else
+                             {
+                               m = self->name + " has requested to stand.";
+                             }
+
                              strcpy(read_msg_.body(), m.c_str());
                              read_msg_.body_length(strlen(read_msg_.body()));
+
+                             self->credits = table_.Dealer.play();
+                             m = "round is over starting another round. place another bet";
+                             self->bet = 0;
+                             std::cerr << "self->bet = " << self->bet << std::endl;
                            }
+
                            if (read_msg_.ca.surrender)
                            {
-                             read_msg_.ca.surrender = true;
                              std::string m = self->name + " has requested to surrender.";
+                             //we can some functions in hand to clear its contents in _Hand array
 
-                             // self->player_hand = NULL:
                              //bet deducted in player
                              //clear dealer hand
                              strcpy(read_msg_.body(), m.c_str());
                              read_msg_.body_length(strlen(read_msg_.body()));
                            }
-                         }
 
-                         // display the cards if everyone has joined
-                         if (table_.all_players_have_a_name())
-                         {
-                           /*  deal 2 cards to everyone
-            table_.Dealer.deal();
-            read_msg_.gs.dealer_cards_valid = true;
-            read_msg_.gs.dealer_cards[0] = table_.Dealer.Hand.cards[0];
-            read_msg_.gs.dealer_cards[1] = table_.Dealer.Hand.cards[1];
-            read_msg_.gs.dealer_cards[2] = table_.Dealer.Hand.cards[2];
-            */
+                           // display the cards if everyone has joined
+                           if (table_.all_players_have_a_name())
+                           {
+                             //will display gs information to client window
+                           }
+                           if (table_.Dealer.round)
+                           {
+                             self->player_hand.reset_hands();
+                             table_.Dealer.dealer_hand.reset_hands();
+                             table_.Dealer.round = false;
+                           }
+
+                           read_msg_.encode_header(); // so the body text above gets sent
+                           table_.deliver(read_msg_);
+                           do_read_header();
                          }
-                         read_msg_.encode_header(); // so the body text above gets sent
-                         table_.deliver(read_msg_);
-                         do_read_header();
                        }
                        else
                        {
@@ -363,9 +538,8 @@ private:
                        }
                      });
   }
-
-  void
-  do_write()
+  //}
+  void do_write()
   {
     auto self(shared_from_this());
     asio::async_write(socket_, asio::buffer(write_msgs_.front().data(), write_msgs_.front().length()), [this, self](std::error_code ec, std::size_t /*length*/) {
