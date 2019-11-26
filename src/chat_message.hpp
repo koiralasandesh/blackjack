@@ -6,35 +6,36 @@
 #include <cstring>
 #include "hand.h"
 
-// these two classes are examples of sending an entire structure as part of the header
 class game_state {
   public:
     bool dealer_cards_valid;
     Hand dealer_hand;
     bool player_cards_valid;
-    Hand player_hand; // [players][cards]
-    // note you can't use std::string or pointers
-    //DEALER AND PLAYER CREDITS
-    //int dealer_credits;
-    //int player_credits;
+    Hand player_hand;
+    int player_credits;
 };
 
 class client_action {
   public:
-    bool hit;   
-    bool stand;
-    bool surrender;
-    bool split;
-    bool doubleDown;
-    bool join;
-    bool name_valid;
-    char name[25];
-    bool bet;
+    bool hit = false;   
+    bool stand = false;
+    bool surrender = false;
+    bool split = false;
+    bool split_stand = false;
+    bool doubleDown = false;
+    bool hit_split = false;
+    bool bet = false;
+    bool name_valid = false;
     int bet_amt;
+    bool join;
+    char name[25];
 };
 
 class chat_message { 
   public:
+    client_action ca;
+    game_state gs;
+    
     enum { header_length = 4 + sizeof(client_action) + sizeof(game_state) };
     enum { max_body_length = 512 };
 
@@ -96,56 +97,10 @@ class chat_message {
       std::memcpy(p,&ca,sizeof(client_action));
       std::memcpy(p+sizeof(client_action),&gs,sizeof(game_state));
     }
-
   private:
     char data_[header_length + max_body_length];
     std::size_t body_length_;
-  public:
-    client_action ca;
-    game_state gs;
 };
 
 #endif // CHAT_MESSAGE_HPP
 
-/*
-old make file
-#test: card.h card.cpp test.cpp shoe.h shoe.cpp hand.h hand.cpp player_struct.h player_struct.cpp player.h player.cpp dealer.h dealer.cpp
-#	g++ -o test test.cpp card.cpp shoe.cpp hand.cpp player.cpp dealer.cpp
-
-#clean:
-#	rm test
-
-CXX=g++
-
-CPPFLAGS=-I../asio-1.13.0/include
-CXXFLAGS=-Wall -g -std=c++11 -O0
-
-GTKLINKFLAGS=$(shell pkg-config --libs gtk+-2.0)
-GTKCOMPILEFLAGS=$(shell pkg-config --cflags gtk+-2.0)
-
-TARGETS=bjd bjp
-
-all:${TARGETS}
-
-bjp:  bjp.cpp hand.o card.o
-	${CXX} ${CXXFLAGS} ${GTKCOMPILEFLAGS} ${CPPFLAGS} $< hand.o card.o -o $@  \
-           ${GTKLINKFLAGS} -lpthread 
-
-bjd: bjd.cpp chat_message.o card.o shoe.o hand.o
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ card.o shoe.o hand.o $< -lpthread
-
-chat_message.o: chat_message.hpp hand.o
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
-  
-card.o: card.cpp card.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
-	
-shoe.o: shoe.cpp shoe.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
-	
-hand.o: hand.cpp hand.h
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
-
-clean:
-	-rm -f ${TARGETS} *.o
-*/

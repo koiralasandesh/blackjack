@@ -46,7 +46,7 @@ int Hand::get_hand_value(int which_hand) {
 
 void Hand::set_hand_value(int which_hand) {
 	int i;
-	//_hand_value = 0;
+	_hand_value = 0;
 	_split_value = 0;
 	if (which_hand) {
 		for (i = _split_index-1; i >= 0; i--) {
@@ -54,24 +54,16 @@ void Hand::set_hand_value(int which_hand) {
 		}
 	}
 	else {
-		/*
 		for (i = _hand_index-1; i >= 0; i--) {
 			_hand_value += _hand[i].get_value();
 		}
-		*/
-		_hand_value += _hand[_hand_index-1].get_value();
+		//_hand_value += _hand[_hand_index-1].get_value();
 	}
-	/*
-	// Vector version
-	for (auto& c : _hand) {
-		_total_value += c.get_value();
-	}
-	*/
 }
 // check the hand index after card is added
 int Hand::get_hand_index(int which_hand){
 	if (which_hand) {
-		return _hand_index;
+		return _split_index;
 	}
 	else {
 		return _hand_index;
@@ -110,13 +102,18 @@ void Hand::reset_hands() {
 	
 	_hand_value = 0;
 }
-/*
+
 void Hand::split_cards() {
-	
+	_split_hand[0].set_value(_hand[1].get_value());
+	_split_hand[0].set_suit(Suit(_hand[1].get_suit()));
+	_split_hand[0].set_face(Face(_hand[1].get_face()));
+
+	_hand[1].set_value(-1);
+	_hand[1].set_suit(NO_SUIT);
+	_hand[1].set_face(NO_FACE);
+
+	_hand_index--;
+	_split_index++;
 }
 
-
-*/
-
 // written: Rebecca B 11/4
-

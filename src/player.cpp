@@ -1,4 +1,31 @@
-#include "player.h"
+#include <string>
+#include <iostream>
+#include "chat_message.hpp"
+
+class player
+{
+public:
+  std::string name;
+  int bet = 0;
+  int split_bet = 0;
+  int credits;
+  bool joined = false;
+  bool split = false;
+  bool hand_stand = false;
+  bool split_stand = false;
+  bool hand_bust = false;
+  bool split_bust = false;
+  Hand player_hand;
+  player() : credits{100}
+  {
+    std::cout << "Creating a new player " << std::endl;
+  }
+  virtual ~player() {}
+  virtual void deliver(const chat_message &msg) = 0;
+};
+
+/*#include "player.h"
+
 
 Player::Player(std::string name, int player_number) : _name{name}, _player_number{player_number} { }
 
@@ -100,7 +127,7 @@ void Player::reset_hit() {
 void Player::reset_stand() {
 	_stand = false;
 }
-/*
+
 void Player::win() {
 	ADD: win if 21
 		dealer will have comparison check
@@ -110,7 +137,7 @@ void Player::lose() {
 	ADD: lose if > 21
 		dealer will have comparison check
 }
-*/
+
 
 //added
 void Player::set_win_credits()
@@ -126,4 +153,6 @@ void Player::set_lose_credits()
 int Player::get_bet()
 {
     return _bet;
-}
+}*/
+
+

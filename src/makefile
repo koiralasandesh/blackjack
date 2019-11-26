@@ -16,12 +16,15 @@ TARGETS=bjd bjp
 
 all:${TARGETS}
 
-bjp:  bjp.cpp hand.o card.o
+bjp: bjp.cpp hand.o card.o
 	${CXX} ${CXXFLAGS} ${GTKCOMPILEFLAGS} ${CPPFLAGS} $< hand.o card.o -o $@  \
            ${GTKLINKFLAGS} -lpthread 
 
-bjd: bjd.cpp chat_message.o card.o shoe.o hand.o
-	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ card.o shoe.o hand.o $< -lpthread
+bjd: bjd.cpp chat_message.o card.o shoe.o hand.o player.cpp dealer.cpp
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ card.o shoe.o hand.o player.cpp dealer.cpp $< -lpthread
+	
+# add bjd.o, and add this to both lines in bjd target
+# bjd.cpp too long
 
 chat_message.o: chat_message.hpp hand.o
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
@@ -33,6 +36,12 @@ shoe.o: shoe.cpp shoe.h
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
 	
 hand.o: hand.cpp hand.h
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+	
+player.o: player.cpp
+	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
+	
+dealer.o: dealer.cpp
 	${CXX} ${CXXFLAGS} ${CPPFLAGS} -o $@ -c $<
 
 clean:

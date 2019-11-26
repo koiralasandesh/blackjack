@@ -1,3 +1,110 @@
+#include "player.cpp"
+#include "shoe.h"
+#include <memory>
+
+typedef std::shared_ptr<player> player_ptr;
+
+class dealer
+{
+public:
+  Shoe shoe;
+  int dealer_credits;
+  Hand dealer_hand;
+  bool round = true;
+  player_ptr current_player;
+  dealer() : dealer_credits{500}
+  {
+    std::cout << "Creating a dealer." << std::endl;
+    shoe.create_cards();
+    shoe.shuffle();
+    current_player = NULL;
+   }
+  void print_dealt_card() {
+    std::cout << "\tvalue->" << shoe.next_card().get_value() << ", ";
+    std::cout << "face->" << shoe.next_card().get_face() << ", ";
+    std::cout << "suit->" << shoe.next_card().get_suit() << std::endl;
+  }
+  
+  void check_shoe() {
+    if (shoe._current_card <= 0)
+     {
+       std::cout << "refilling shoe... ";
+       shoe.create_cards();
+       shoe.shuffle();
+       std::cout << "shoe refilled." << std::endl;
+     }
+  }
+
+  void next_player(player_ptr p)
+  {
+    current_player = p;
+  }
+  
+  int play()
+  {
+    if (current_player == NULL)
+    {
+      std::cout << "No current player.\n";
+    }
+    //FIRST DEALER MUST KEEP HITTING ON ITS HAND TILL IT OVER 17
+    //ONCE TOTAL CARD VALUE IS OVER 17 CHCEK IF ITS 21 OR OVER 21
+    //OVER 21 PLAYER AUTOMATICALLY WINS SIMILARLY WE HAD DONE SAME FOR PLAYER WHILE HITTING IF OVER 21 DEALER AUTOMATICALLY
+    //WINS AND DOESNT HAVE TO PLAY
+    //IF BOTH ARE 21 THEN TIE
+    //OTHER THAN THAT COMPARE BOTH VALUES AND GREATER WINS
+
+    if (current_player->player_hand.get_hand_value(0) > 21)
+    {
+      dealer_credits += current_player->bet;
+      //std::cerr << "dealer credits " << dealer_credits << std::endl;
+    }
+    else
+    {
+      while (dealer_hand.get_hand_value(0) < 17)
+      {
+        dealer_hand.add_card_hand(shoe.next_card(), 0);
+        print_dealt_card();
+        dealer_hand.set_hand_value(0);
+        shoe.remove_card();
+      }
+
+      if (dealer_hand.get_hand_value(0) > 21)
+      {
+        current_player->credits += 2 * current_player->bet;
+        dealer_credits -= current_player->bet;
+        //player wins automatically 2.5 times bet added to player credits
+      }
+      else if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(0))
+      {
+        current_player->credits += current_player->bet;
+        //tie bet added back to player credits go for next round
+      }
+      else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(0))
+      {
+        //dealer wins and bet added to its credit
+        dealer_credits += current_player->bet;
+      }
+      else
+      {
+
+        if (current_player->player_hand.get_hand_value(0) == 21) //if player has blackjack, payout is 1.5x
+        {
+          current_player->credits += 2.5 * current_player->bet;
+        }
+        else // player wins and 2*bet added to its credit
+        {
+          current_player->credits += 2 * current_player->bet;
+        }
+      }
+      //printing player credits
+      std::cerr << "player credits = " << current_player->credits << std::endl;
+    }
+
+    round = true;
+    return current_player->credits;
+  }
+};
+/*
 #include "dealer.h"
 #include <iostream>
 #include "mainwin.h"
@@ -82,3 +189,6 @@ void Dealer::player_stand()
 }
 
 //add player and remove player
+
+*/
+
