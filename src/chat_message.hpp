@@ -12,7 +12,11 @@ class game_state {
     Hand dealer_hand;
     bool player_cards_valid;
     Hand player_hand;
+    bool player_split;
     int player_credits;
+    int player_bet;
+    int player_split_bet;
+    int dealer_credits; // for debugging
 };
 
 class client_action {
@@ -22,7 +26,7 @@ class client_action {
     bool surrender = false;
     bool split = false;
     bool split_stand = false;
-    bool doubleDown = false;
+    bool double_down = false;
     bool hit_split = false;
     bool bet = false;
     bool name_valid = false;

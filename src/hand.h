@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HAND_H__
+#define HAND_H__
 
 #include "card.h"
 #include <vector>
@@ -27,6 +28,8 @@ class Hand {
 		void split_cards();		// WIP - move second card to _split_hand
 		int get_hand_index(int which_hand);
 };
+
+#endif
 
 // maybe need method to display/return hand's contents/cards?
 

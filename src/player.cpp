@@ -2,42 +2,27 @@
 #include <iostream>
 #include "chat_message.hpp"
 
-class player
-{
-public:
-  std::string name;
-  int bet = 0;
-  int split_bet = 0;
-  int credits;
-  bool joined = false;
-  bool split = false;
-  bool hand_stand = false;
-  bool split_stand = false;
-  bool hand_bust = false;
-  bool split_bust = false;
-  Hand player_hand;
-  player() : credits{100}
-  {
-    std::cout << "Creating a new player " << std::endl;
-  }
-  virtual ~player() {}
-  virtual void deliver(const chat_message &msg) = 0;
+class Player {
+  public:
+    Player() {
+      std::cout << "Creating a new player " << std::endl;
+    }
+    virtual ~Player() { }
+    virtual void deliver(const chat_message &msg) = 0;
+    std::string name;
+    Hand player_hand;
+    int credits = 100;
+    int bet = 0;
+    int split_bet = 0;
+    bool joined = false;
+    bool split = false;			// main flags for dealer's turn
+    bool hand_stand = false;
+    bool split_stand = false;
+    bool hand_bust = false;
+    bool split_bust = false;
 };
 
-/*#include "player.h"
-
-
-Player::Player(std::string name, int player_number) : _name{name}, _player_number{player_number} { }
-
-Hand Player::get_hand() {
-	return _hand;
-}
-
-void Player::place_bet(int bet) {
-	_bet = bet;
-	_credits -= _bet;
-}
-
+/*
 bool Player::get_playing() {
 	return _playing;
 }
@@ -154,5 +139,4 @@ int Player::get_bet()
 {
     return _bet;
 }*/
-
 

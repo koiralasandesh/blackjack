@@ -22,13 +22,13 @@ Card Hand::get_card(int index, int which_hand) {
 
 void Hand::add_card_hand(Card card, int which_hand) {
 	if (which_hand) {
-		if (_split_hand[_split_index].get_value() == -1) {
+		if (_split_hand[_split_index].get_value() == 0) {
 			_split_hand[_split_index] = card;
 			_split_index++;
 		}
 	}
 	else {
-		if (_hand[_hand_index].get_value() == -1) {
+		if (_hand[_hand_index].get_value() == 0) {
 			_hand[_hand_index] = card;
 			_hand_index++;
 		}
@@ -45,19 +45,17 @@ int Hand::get_hand_value(int which_hand) {
 }
 
 void Hand::set_hand_value(int which_hand) {
-	int i;
 	_hand_value = 0;
 	_split_value = 0;
 	if (which_hand) {
-		for (i = _split_index-1; i >= 0; i--) {
+		for (int i = _split_index-1; i >= 0; i--) {
 			_split_value += _split_hand[i].get_value();
 		}
 	}
 	else {
-		for (i = _hand_index-1; i >= 0; i--) {
+		for (int i = _hand_index-1; i >= 0; i--) {
 			_hand_value += _hand[i].get_value();
 		}
-		//_hand_value += _hand[_hand_index-1].get_value();
 	}
 }
 // check the hand index after card is added
@@ -91,10 +89,10 @@ int Hand::num_cards_in_hand(int which_hand) {
 void Hand::reset_hands() {
 	int i;
 	for (i = 0; i < 13; i++) {
-		_hand[i].set_value(-1);
+		_hand[i].set_value(0);
 		_hand[i].set_suit(NO_SUIT);
 		_hand[i].set_face(NO_FACE);
-		_split_hand[i].set_value(-1);
+		_split_hand[i].set_value(0);
 		_split_hand[i].set_suit(NO_SUIT);
 		_split_hand[i].set_face(NO_FACE);
 	}
@@ -108,7 +106,7 @@ void Hand::split_cards() {
 	_split_hand[0].set_suit(Suit(_hand[1].get_suit()));
 	_split_hand[0].set_face(Face(_hand[1].get_face()));
 
-	_hand[1].set_value(-1);
+	_hand[1].set_value(0);
 	_hand[1].set_suit(NO_SUIT);
 	_hand[1].set_face(NO_FACE);
 

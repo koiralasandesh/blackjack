@@ -23,12 +23,9 @@ void Shoe::create_cards() {
 					value++;
 				}
 				else if (Face(face) < JACK) {	// initialize face cards to correct value
-					//new_card = Card{value++, Suit(s), Face(f)};		vector version
-					//if (Face(f) == ACE) { new_card->ace_to_11(); }
 					new_card.set_value(value++);
 				}
 				else {	// Jack, Queen, King
-					//new_card = new Card{10, Suit(suit), Face(face)};		vector version
 					new_card.set_value(10);
 				}
 				new_card.set_suit(Suit(suit));
@@ -53,10 +50,6 @@ void Shoe::remove_card() {
 }
 
 void Shoe::shuffle() {	// randomized w/ time-based seed
-	/* vector version
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::shuffle(_shoe.begin(), _shoe.end(), std::default_random_engine(seed));
-	*/
 	int n = sizeof(_shoe) / sizeof(_shoe[0]);
 	std::srand(std::time(0));
 	std::random_shuffle(_shoe, _shoe+n);
@@ -71,5 +64,3 @@ void Shoe::print_cards() {
 		std::cout << "\t    face:  " << _shoe[i].get_face() << std::endl;
 	}
 }
-
-// written: Rebecca B 11/2
