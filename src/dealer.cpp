@@ -188,7 +188,7 @@ class Dealer {
         dealer_credits -= current_player->split_bet;
         current_player->credits += 2 * current_player->split_bet;
       }
-
+      round = true;
       bust = false;
       std::cout << "\n##### ENDING DEALER'S TURN #####\n\n";
       return current_player->credits;

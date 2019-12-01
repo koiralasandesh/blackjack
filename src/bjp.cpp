@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <deque>
-#include <iostream>
 #include <thread>
 #include <assert.h>
 #include "asio.hpp"
@@ -92,11 +91,13 @@ class chat_client {
               p_hand += "F->" + std::to_string(read_msg_.gs.player_hand.get_hand(0)[count].get_face()) + " | ";
               p_hand += "S->" + std::to_string(read_msg_.gs.player_hand.get_hand(0)[count].get_suit()) + "\n";
             }
+            p_hand += "\n";
             for (int count = 0; count < read_msg_.gs.player_hand.get_hand_index(1); count++) {
               p_split_hand += "V->" + std::to_string(read_msg_.gs.player_hand.get_hand(1)[count].get_value()) + " | ";
               p_split_hand += "F->" + std::to_string(read_msg_.gs.player_hand.get_hand(1)[count].get_face()) + " | ";
               p_split_hand += "S->" + std::to_string(read_msg_.gs.player_hand.get_hand(1)[count].get_suit()) + "\n";
             }
+            p_split_hand += "\n";
             
             // dealer cards
             for (int count = 0; count < read_msg_.gs.dealer_hand.get_hand_index(0); count++) {
@@ -109,6 +110,10 @@ class chat_client {
             p_hand += "Hand value: " + std::to_string(read_msg_.gs.player_hand.get_hand_value(0)) + "\n";
             p_hand += "Split value: " + std::to_string(read_msg_.gs.player_hand.get_hand_value(1)) + "\n";
             d_hand += "Hand value: " + std::to_string(read_msg_.gs.dealer_hand.get_hand_value(0));
+            
+            std::string credits_text = "Credits: " + std::to_string(read_msg_.gs.player_credits) + "\n";
+            credits_text += "Bet: " + std::to_string(read_msg_.gs.player_bet) + "\n";
+            credits_text += "Split Bet: " + std::to_string(read_msg_.gs.player_split_bet);
 
             if (read_msg_.gs.player_hand.get_hand_index(0)) {
               gtk_label_set_text (GTK_LABEL(playerHand), p_hand.c_str() );
@@ -123,14 +128,12 @@ class chat_client {
             else {
               gtk_label_set_text (GTK_LABEL(dealerCards), "(empty)");
             }
+            
+            gtk_label_set_text(GTK_LABEL(creditsView), credits_text.c_str());
 
             gtk_label_set_justify(GTK_LABEL(playerHand), GTK_JUSTIFY_CENTER);
             gtk_label_set_justify(GTK_LABEL(dealerCards), GTK_JUSTIFY_CENTER);
-            std::string credits_text = "Credits: " + std::to_string(read_msg_.gs.player_credits) + "\n";
-            credits_text += "\tBet: " + std::to_string(read_msg_.gs.player_bet) + "\n";
-            credits_text += "\tSplit Bet: " + std::to_string(read_msg_.gs.player_split_bet);
-
-            gtk_label_set_text(GTK_LABEL(creditsView), credits_text.c_str());
+            gtk_label_set_justify(GTK_LABEL(creditsView), GTK_JUSTIFY_CENTER);
           }
           gdk_threads_leave();
 
@@ -390,6 +393,11 @@ int main(int argc, char *argv[]) {
   gtk_container_add(GTK_CONTAINER(debugWindow), debugVbox); // for debugging
 
   // make and add labels to debugVbox
+  gtk_box_pack_start(GTK_BOX(debugVbox), playerHandTitle, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(debugVbox), playerHand, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(debugVbox), dealerCardsTitle, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(debugVbox), dealerCards, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(debugVbox), creditsView, TRUE, TRUE, 0);
 
   gtk_box_pack_start(GTK_BOX(vbox), toView, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), joinButton, TRUE, TRUE, 0);
@@ -403,11 +411,11 @@ int main(int argc, char *argv[]) {
   gtk_box_pack_start(GTK_BOX(vbox), double_downButton, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), surrenderButton, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), fromView, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), playerHandTitle, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), playerHand, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), dealerCardsTitle, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), dealerCards, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), creditsView, TRUE, TRUE, 0);
+  //gtk_box_pack_start(GTK_BOX(vbox), playerHandTitle, TRUE, TRUE, 0);
+  //gtk_box_pack_start(GTK_BOX(vbox), playerHand, TRUE, TRUE, 0);
+  //gtk_box_pack_start(GTK_BOX(vbox), dealerCardsTitle, TRUE, TRUE, 0);
+  //gtk_box_pack_start(GTK_BOX(vbox), dealerCards, TRUE, TRUE, 0);
+  //gtk_box_pack_start(GTK_BOX(vbox), creditsView, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), rulesButton, TRUE, TRUE, 0);
 
   g_signal_connect(G_OBJECT(hitButton), "button_press_event", G_CALLBACK(hitCallback), fromView);
@@ -421,10 +429,10 @@ int main(int argc, char *argv[]) {
   g_signal_connect(G_OBJECT(betButton), "button_press_event", G_CALLBACK(betCallback), betView);
   g_signal_connect(G_OBJECT(rulesButton), "button_press_event", G_CALLBACK(rulesCallback), fromView);
   
-  gtk_widget_set_size_request(window, 400, 800);
+  gtk_widget_set_size_request(window, 400, 600);
   gtk_widget_show_all(window);
 
-  gtk_widget_set_size_request(debugWindow, 400, 500); // for debugging
+  gtk_widget_set_size_request(debugWindow, 400, 600); // for debugging
   gtk_widget_show_all(debugWindow); // for debugging
   
   g_signal_connect(G_OBJECT(window), "delete_event", G_CALLBACK(delete_event), NULL);

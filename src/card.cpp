@@ -26,20 +26,17 @@ void Card::set_face(Face face) {
 	_face = face;
 }
 
-bool Card::is_ace() {
+void Card::is_ace() {
 	if (_face == ACE) {
-		return true;
-	}
-	else {
-		return false;
+		_is_ace = true;
 	}
 }
-
+/*
 void Card::ace_to_1() {
 	if (_face == ACE) {
 		_value = 1;
 	}
 }
-
+*/
 // written: Rebecca B 11/2
 

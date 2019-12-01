@@ -18,8 +18,9 @@ void Shoe::create_cards() {
 		for (suit = 1; suit < 5; suit++) {
 			for (face = 1; face < 14; face++) {
 				Card new_card;
-				if (Face(face) == ACE) {
+				if (Face(face) == ACE) {  // ace has custom values
 					new_card.set_value(11);
+					new_card.is_ace();
 					value++;
 				}
 				else if (Face(face) < JACK) {	// initialize face cards to correct value
