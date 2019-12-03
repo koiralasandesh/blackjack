@@ -10,7 +10,7 @@ class Dealer {
     Shoe shoe;
     Hand dealer_hand;
     int dealer_credits = 500;
-    bool bust = false;  // is this necessary?
+    bool bust = false;
     bool round = true;
     player_ptr current_player;
 
@@ -63,6 +63,7 @@ class Dealer {
       if (dealer_hand.get_hand_value(0) == 21)
       {
         dealer_credits += current_player->bet;
+        std::cout << "Dealer has Blackjack!" << std::endl;
       }
       else
       {
@@ -79,6 +80,8 @@ class Dealer {
         if (dealer_hand.get_hand_value(0) > 21)
         {
           bust = true; // if player busted, their bet will be 0; bottom if-statements will not be entered
+          std::cout << "Dealer bust!\n";
+          std::cout << current_player->name << " wins!\n";
         }
         // otherwise, continue to compare with player hands
         else
@@ -91,6 +94,7 @@ class Dealer {
             if (current_player->hand_bust)
             {
               dealer_credits += current_player->bet;
+              std::cout << current_player->name << "'s hand busted!\n";
             }
             // player got 21, now check if dealer ties or loses; dealer cannot win
             if (current_player->player_hand.get_hand_value(0) == 21)
@@ -99,12 +103,14 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == 21)
               {
                 current_player->credits += current_player->bet; // give player back their bet to credits
+                std::cout << "Dealer and " << current_player->name "'s hands ties!\n";
               }
               // dealer loses
               else
               {
                 dealer_credits -= current_player->bet;
                 current_player->credits += 2 * current_player->bet;
+                std::cout << current_player->name << "'s hand wins!\n";
               }
             }
             // player stood, now check if dealer ties, wins, or loses
@@ -114,17 +120,20 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(0))
               {
                 current_player->credits += current_player->bet;
+                std::cout << "Dealer and " << current_player->name "'s hands ties!\n";
               }
               // dealer wins
               else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(0))
               {
                 dealer_credits += current_player->bet;  // leave player credits alone, bet was deducted earlier
+                std::cout << "Dealer's hand wins!\n";
               }
               // dealer loses
               else
               {
                 dealer_credits -= current_player->bet;
                 current_player->credits += 2 * current_player->bet;
+                std::cout << current_player->name << "'s hand wins!\n";
               }
             }
           }
@@ -137,6 +146,7 @@ class Dealer {
             if (current_player->split_bust)
             {
               dealer_credits += current_player->split_bet;
+              std::cout << current_player->name << "'s split hand busted!\n";
             }
             // player got 21, now check if dealer ties or loses; dealer cannot win
             if (current_player->player_hand.get_hand_value(1) == 21)
@@ -145,12 +155,14 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == 21)
               {
                 current_player->credits += current_player->split_bet; // give player back their bet to credits
+                std::cout << "Dealer and " << current_player->name "'s split hands ties!\n";
               }
               // dealer loses
               else
               {
                 dealer_credits -= current_player->split_bet;
                 current_player->credits += 2 * current_player->split_bet;
+                std::cout << current_player->name << "'s split hand wins!\n";
               }
             }
             // player stood, now check if dealer ties, wins, or loses
@@ -160,17 +172,20 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(1))
               {
                 current_player->credits += current_player->split_bet;
+                std::cout << "Dealer and " << current_player->name "'s split hands ties!\n";
               }
               // dealer wins
               else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(1))
               {
                 dealer_credits += current_player->split_bet;  // leave player credits alone, bet was deducted earlier
+                std::cout << "Dealer's hand wins!\n";
               }
               // dealer loses
               else
               {
                 dealer_credits -= current_player->split_bet;
                 current_player->credits += 2 * current_player->split_bet;
+                std::cout << current_player->name << "'s split hand wins!\n";
               }
             }
           }
@@ -182,11 +197,13 @@ class Dealer {
       {
         dealer_credits -= current_player->bet;
         current_player->credits += 2 * current_player->bet;
+        std::cout << "Dealer busts!\n";
       }
       if (bust && !current_player->split_bust)
       {
         dealer_credits -= current_player->split_bet;
         current_player->credits += 2 * current_player->split_bet;
+        std::cout << "Dealer busts!\n";
       }
       round = true;
       bust = false;
