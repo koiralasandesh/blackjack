@@ -103,7 +103,7 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == 21)
               {
                 current_player->credits += current_player->bet; // give player back their bet to credits
-                std::cout << "Dealer and " << current_player->name << "'s hands ties!\n";
+                std::cout << "Dealer and " << current_player->name "'s hands ties!\n";
               }
               // dealer loses
               else
@@ -120,7 +120,7 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(0))
               {
                 current_player->credits += current_player->bet;
-                std::cout << "Dealer and " << current_player->name << "'s hands ties!\n";
+                std::cout << "Dealer and " << current_player->name "'s hands ties!\n";
               }
               // dealer wins
               else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(0))
@@ -155,7 +155,7 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == 21)
               {
                 current_player->credits += current_player->split_bet; // give player back their bet to credits
-                std::cout << "Dealer and " << current_player->name << "'s split hands ties!\n";
+                std::cout << "Dealer and " << current_player->name "'s split hands ties!\n";
               }
               // dealer loses
               else
@@ -172,7 +172,7 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(1))
               {
                 current_player->credits += current_player->split_bet;
-                std::cout << "Dealer and " << current_player->name << "'s split hands ties!\n";
+                std::cout << "Dealer and " << current_player->name "'s split hands ties!\n";
               }
               // dealer wins
               else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(1))
