@@ -212,6 +212,8 @@ class Dealer {
       round = true;
       bust = false;
       std::cout << "\n##### ENDING DEALER'S TURN #####\n\n";
+      std::cout << "\nDealer credit leftover " << dealer_credits << "\n";
+      std::cout << "\nPlayer credit leftover " << current_player->credits << "\n";
       return current_player->credits;
     }
 };
