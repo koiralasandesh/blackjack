@@ -51,9 +51,7 @@ class Dealer {
 
       std::cout << "\n##### STARTING DEALER'S TURN #####\n\n";
 
-      // get initial hand values
-      current_player->player_hand.set_hand_value(0);
-      current_player->player_hand.set_hand_value(1);
+      // get initial hand value
       dealer_hand.set_hand_value(0);
 
       // check if dealer has blackjack
@@ -89,6 +87,7 @@ class Dealer {
           // comparing regular hand
           if (current_player->bet)
           {
+            std::cout << "Handling " << current_player->name << "'s regular hand now...\n";
             // player busted; doesn't matter what dealer's hand is since player will have busted first, technically
             // this if-statement may not be needed at all
             if (current_player->hand_bust)
@@ -103,7 +102,7 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == 21)
               {
                 current_player->credits += current_player->bet; // give player back their bet to credits
-                std::cout << "Dealer and " << current_player->name "'s hands ties!\n";
+                std::cout << "Dealer and " << current_player->name << "'s hands ties!\n";
               }
               // dealer loses
               else
@@ -116,21 +115,25 @@ class Dealer {
             // player stood, now check if dealer ties, wins, or loses
             if (current_player->hand_stand)
             {
+              std::cout << "player = " << current_player->player_hand.get_hand_value(0) << ", dealer = " << dealer_hand.get_hand_value(0) << std::endl;
               // dealer ties
               if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(0))
               {
+                std::cout << "Entering tie condition\n";
                 current_player->credits += current_player->bet;
-                std::cout << "Dealer and " << current_player->name "'s hands ties!\n";
+                std::cout << "Dealer and " << current_player->name << "'s hands ties!\n";
               }
               // dealer wins
               else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(0))
               {
+                std::cout << "Entering player lose/dealer win condition\n";
                 dealer_credits += current_player->bet;  // leave player credits alone, bet was deducted earlier
                 std::cout << "Dealer's hand wins!\n";
               }
               // dealer loses
               else
               {
+                std::cout << "Entering player win/dealer lose condition\n";
                 dealer_credits -= current_player->bet;
                 current_player->credits += 2 * current_player->bet;
                 std::cout << current_player->name << "'s hand wins!\n";
@@ -141,6 +144,7 @@ class Dealer {
           // handling split hand
           if (current_player->split_bet)
           {
+            std::cout << "Handling " << current_player->name << "'s split hand now...\n";
             // player busted; doesn't matter what dealer's hand is since player will have busted first, technically
             // this if-statement may not be needed at all
             if (current_player->split_bust)
@@ -155,7 +159,7 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == 21)
               {
                 current_player->credits += current_player->split_bet; // give player back their bet to credits
-                std::cout << "Dealer and " << current_player->name "'s split hands ties!\n";
+                std::cout << "Dealer and " << current_player->name << "'s split hands ties!\n";
               }
               // dealer loses
               else
@@ -172,7 +176,7 @@ class Dealer {
               if (dealer_hand.get_hand_value(0) == current_player->player_hand.get_hand_value(1))
               {
                 current_player->credits += current_player->split_bet;
-                std::cout << "Dealer and " << current_player->name "'s split hands ties!\n";
+                std::cout << "Dealer and " << current_player->name << "'s split hands ties!\n";
               }
               // dealer wins
               else if (dealer_hand.get_hand_value(0) > current_player->player_hand.get_hand_value(1))

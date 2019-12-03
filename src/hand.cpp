@@ -1,5 +1,6 @@
 #include "hand.h"
 #include <vector>
+#include <iostream>
 
 // maybe i should set default values for same_cards?
 
@@ -27,6 +28,7 @@ void Hand::add_card_hand(Card card, int which_hand) {
 			_split_hand[_split_index] = card;
 			if (card.get_face() == ACE) {
 			  _split_has_ace = true;
+			  split_ace_count++;
 			}
 			_split_index++;
 		}
@@ -36,6 +38,7 @@ void Hand::add_card_hand(Card card, int which_hand) {
 			_hand[_hand_index] = card;
 			if (card.get_face() == ACE) {
 			  _hand_has_ace = true;
+			  ace_count++;
 			}
 			_hand_index++;
 		}
@@ -54,7 +57,6 @@ int Hand::get_hand_value(int which_hand) {
 void Hand::set_hand_value(int which_hand) {
 	_hand_value = 0;
 	_split_value = 0;
-	int ace_count = 0;
 	std::vector<int> ace_index;
 	
 	if (which_hand) {
@@ -62,15 +64,14 @@ void Hand::set_hand_value(int which_hand) {
 			_split_value += _split_hand[i].get_value();
 			if (_split_hand[i].get_face() == ACE) {
 			  ace_index.push_back(i);
-		    ace_count++;
 		  }
 		}
 		if (_split_value > 21 && _split_has_ace) {
-		  while (!ace_count && _split_value > 21) {
+		  while (split_ace_count > 0 && _split_value > 21) {
 		    _split_value -= 10;
 		    _split_hand[ace_index.back()].set_value(1);
 		    ace_index.pop_back();
-		    ace_count--;
+		    split_ace_count--;
 		  }
 		}
 	}
@@ -80,11 +81,10 @@ void Hand::set_hand_value(int which_hand) {
 		  _hand_value += _hand[i].get_value();
 		  if (_hand[i].get_face() == ACE) {
 		    ace_index.push_back(i);
-		    ace_count++;
 		  }
 		}
 		if (_hand_value > 21 && _hand_has_ace) {
-		  while (!ace_count && _hand_value > 21) {
+		  while (ace_count > 0 && _hand_value > 21) {
 		    _hand_value -= 10;
 		    _hand[ace_index.back()].set_value(1);
 		    ace_index.pop_back();

@@ -16,6 +16,8 @@ class Hand {
 		int _split_index = 0;								// eg. hand w/ 2 cards will have index = 2
 		bool _hand_has_ace = false;
 		bool _split_has_ace = false;
+		int ace_count = 0;
+		int split_ace_count = 0;
 		
 	public:
 		Card* get_hand(int which_hand);					// index for card 1 should be 0, etc.
