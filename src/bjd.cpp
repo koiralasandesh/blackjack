@@ -384,7 +384,7 @@ private:
                                    //now is dealer turn maybe method in dealer class to get card in its hand till less then 17 then get total and check with player
                                    std::string m = self->name + " has requested to stand.";
 
-                                   if (self->bet)
+                                   if (self->bet && !self->hand_bust)
                                    {
                                     self->hand_stand = true;
                                     //self->credits = table_.dealer.play();
