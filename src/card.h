@@ -6,7 +6,7 @@ typedef enum {NO_FACE, ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN
 
 class Card {	// every card initialized to {-1, NO_SUIT, NO_FACE}
 	private:
-		int _value = -1; 			// initially only 1-10
+		int _value = 0; 			// initially only 1-10
 		Suit _suit = NO_SUIT;		// SPADE = 0, CLUB = 1, etc.
 		Face _face = NO_FACE;
 		bool _is_ace = false;
