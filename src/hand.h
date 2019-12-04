@@ -2,12 +2,9 @@
 #define HAND_H__
 
 #include "card.h"
-#include <vector>
 
 class Hand {
 	private:
-		//std::vector<Card> _hand;
-		//std::vector<Card> _split_hand;
 		Card _hand[13];			// can't possibly have more than 13 cards w/o winning/busting
 		Card _split_hand[13];
 		int _hand_value = 0;
